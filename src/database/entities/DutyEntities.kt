@@ -1,4 +1,4 @@
-package com.example.database
+package com.example.database.entities
 
 import org.ktorm.entity.Entity
 import org.ktorm.schema.*

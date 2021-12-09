@@ -17,11 +17,6 @@ fun Route.getAllStudent(){
     }
 }
 
-fun Route.addStudent(){
-    get("/add"){
-//        call.respond(Repository.addStudent())
-    }
-}
 fun Route.registerStudent(){
     post("/register"){
         val newUser = call.receive<RegisterBody>()

@@ -33,7 +33,6 @@ fun Application.module(testing: Boolean = false) {
         registerStudent()
         loginStudent()
         getAllStudent()
-        addStudent()
     }
 }
 

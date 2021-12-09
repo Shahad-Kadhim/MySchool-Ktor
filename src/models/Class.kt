@@ -7,6 +7,6 @@ data class Class (
     var name:String,
     var teacherId :String ,
     var schoolId: String ,
-    val stage :Int,
+    val stage :Int?,
 )
 

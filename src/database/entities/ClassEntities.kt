@@ -5,10 +5,10 @@ import org.ktorm.schema.*
 
 object DBClassTable: Table<DBClassEntity>("class") {
 
-    val id = varchar("id").primaryKey().bindTo { it.id }
+    val id = long("id").primaryKey().bindTo { it.id }
     val name = varchar("name").bindTo { it.name }
-    val teacherId = varchar("teacherId").bindTo { it.teacherId }
-    val schoolId = varchar("schoolId").bindTo { it.schoolId }
+    val teacherId = long("teacherId").references(DBTeacherTable){ it.teacherId }
+    val schoolId = long("schoolId").references(DBSchoolTable){ it.schoolId }
     val stage = int("stage").bindTo { it.stage }
 
 }
@@ -17,9 +17,9 @@ interface DBClassEntity: Entity<DBClassEntity> {
 
     companion object : Entity.Factory<DBClassEntity>()
 
-    val id:String
+    val id:Long
     var name:String
-    var teacherId :String
-    var schoolId: String
+    val teacherId :DBTeacherEntity
+    var schoolId: DBSchoolEntity
     val stage :Int
 }

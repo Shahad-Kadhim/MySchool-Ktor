@@ -4,9 +4,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Duty(
-    val id: String,
+    val id: Long,
     val state: String, // DONE , TO_DO or Missing
-    val studentID: String,
+    val studentID: Long,
     var title: String,
     var content: String,
 )

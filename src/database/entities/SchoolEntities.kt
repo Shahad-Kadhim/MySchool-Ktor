@@ -5,9 +5,9 @@ import org.ktorm.schema.*
 
 object DBSchoolTable: Table<DBSchoolEntity>("School") {
 
-    val id = varchar("id").primaryKey().bindTo { it.id }
+    val id = long("id").primaryKey().bindTo { it.id }
     val name = varchar("name").bindTo { it.name }
-    val mangerId = varchar("mangerId").bindTo { it.mangerId }
+    val mangerId = long("mangerId").references(DBMangerTable){ it.mangerId }
 
 }
 
@@ -15,7 +15,7 @@ interface DBSchoolEntity: Entity<DBSchoolEntity> {
 
     companion object : Entity.Factory<DBSchoolEntity>()
 
-    val id: String
+    val id: Long
     var name: String
-    var mangerId: String
+    var mangerId: DBMangerEntity
 }

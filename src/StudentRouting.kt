@@ -21,6 +21,7 @@ fun Route.registerStudent(){
     post("/register"){
         val newUser = call.receive<RegisterBody>()
         val student = Student(
+            id = 0,
             name = newUser.name,
             password= newUser.password,
             age = newUser.age,
@@ -28,11 +29,14 @@ fun Route.registerStudent(){
             phone = newUser.phone,
             stage = newUser.stage
         )
-        if(Repository.addStudent(student)){
+
+//        if(
+            Repository.addStudent(student)
+//        ){
             call.respond(jwtConfig.generateToken(JwtConfig.JwtUser( student.name,student.password)))
-        }else{
-            call.respond(HttpStatusCode.Conflict,"Already account register")
-        }
+//        }else{
+//            call.respond(HttpStatusCode.Conflict,"Already account register")
+//        }
     }
 }
 

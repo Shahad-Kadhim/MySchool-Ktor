@@ -5,7 +5,7 @@ import org.ktorm.schema.*
 
 object DBStudentTable: Table<DBStudentEntity>("student") {
 
-    val id = varchar("id").primaryKey().bindTo { it.id }
+    val id = long("id").primaryKey().bindTo { it.id }
     val name = varchar("name").bindTo { it.name }
     val password = varchar("password").bindTo { it.password }
     val age = int("age").bindTo { it.age }
@@ -19,7 +19,7 @@ interface DBStudentEntity: Entity<DBStudentEntity> {
 
     companion object : Entity.Factory<DBStudentEntity>()
 
-    val id: String
+    val id: Long
     var name: String
     var password: String
     var age: Int

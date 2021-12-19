@@ -1,46 +1,46 @@
 package com.example.repostiory
 
-import com.example.database.Dao
+import com.example.dao.ClassDao
+import com.example.dao.StudentDao
+import com.example.mappers.MemberClassMapper
+import com.example.mappers.StudentMapper
 import com.example.models.Class
+import com.example.models.StudentClasses
 import com.example.models.Student
 
 object Repository {
-    private val database = Dao()
+    private val  classDao = ClassDao
+    private val studentMapper = StudentMapper()
+    private val studentDao= StudentDao()
+    private val memberClassMapper =MemberClassMapper()
+    fun getAllStudent(): List<Student> =
+        studentDao.getAllStudents().map { studentMapper.map(it) }
 
-    fun getAllStudent() =
-        database.getAllStudents()
+    fun getStudentClasses(studentId: Long): List<StudentClasses> =
+        studentDao.getStudentClasses(studentId).map {
+            memberClassMapper.map(it)
+        }
 
-    fun getStudentClasses(studentId: String) =
-        database.getStudentClasses(studentId)
-
-    fun getClassById(classId: String)=
-        database.getClassById(classId)
+    fun getClassById(classId: Long)=
+        classDao.getClassById(classId)
 
     fun addStudent(student: Student) =
-        database.addStudent(student)
+        studentDao.createStudent(student)
 
-    fun deleteStudent(id:String) =
-        database.removeStudent(id)
+    fun deleteStudent(studentId: Long) =
+        studentDao.removeStudent(studentId)
 
-    fun getUserByNameAndPassword(name: String, password: String) =
-       database.getStudentByNameAndPassword(name,password)?.let {
-           Student(
-               it.name,
-               it.password,
-               it.age,
-               it.note,
-               it.phone,
-               it.stage
-           )
+    fun getUserByNameAndPassword(name: String, password: String): Student? =
+       (studentDao.getStudentByNameAndPassword(name,password))?.let {
+           studentMapper.map(it)
        }
 
-    fun addClass(className: String, teacherId: String, schoolId: String, stage: Int?): Int{
-        Class(className,teacherId,schoolId,stage).also {
-             return database.insertClass(it)
-        }
-    }
 
-    fun getMembers(classId: String) =
-        database.getMembers(classId)
+    fun addClass(mClass: Class): Any =
+        classDao.createClass(mClass)
+
+
+    fun getMembers(classId: Long) =
+        classDao.getMembersOfClass(classId)
 
 }

@@ -3,7 +3,7 @@ package com.example.models
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MemberClass(
-    val ClassId: String,
+data class StudentClasses(
+    val classId: Long,
     val joinDate: String
 )

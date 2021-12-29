@@ -7,15 +7,15 @@ import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
 
-fun Route.getAllClass(){
-    get("{studentId}/classes"){
-        call.parameters["studentId"]?.toLongOrNull()?.let { studentId ->
-            Repository.getStudentClasses(studentId)
-        }?.let { classes ->
-            call.respond(classes)
-        }
-    }
-}
+//fun Route.getAllClass(){
+//    get("{studentId}/classes"){
+//        call.parameters["studentId"]?.toLongOrNull()?.let { studentId ->
+//            Repository.getStudentClasses(studentId)
+//        }?.let { classes ->
+//            call.respond(classes)
+//        }
+//    }
+//}
 
 fun Route.getClassById(){
     get("/classes/{classId}") {

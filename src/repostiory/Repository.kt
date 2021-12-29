@@ -16,10 +16,10 @@ object Repository {
     fun getAllStudent(): List<Student> =
         studentDao.getAllStudents().map { studentMapper.map(it) }
 
-    fun getStudentClasses(studentId: Long): List<StudentClasses> =
-        studentDao.getStudentClasses(studentId).map {
-            memberClassMapper.map(it)
-        }
+//    fun getStudentClasses(studentId: Long): List<StudentClasses> =
+//        studentDao.getStudentClasses(studentId).map {
+//            memberClassMapper.map(it)
+//        }
 
     fun getClassById(classId: Long)=
         classDao.getClassById(classId)

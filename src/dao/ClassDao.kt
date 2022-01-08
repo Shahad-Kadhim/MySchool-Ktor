@@ -2,23 +2,30 @@ package com.example.dao
 
 import com.example.database.entities.*
 import com.example.models.Class
+import com.example.models.StudentClasses
 import com.example.util.insertClass
-import com.example.database.DatabaseManager
+import com.example.util.toClass
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.select
 
 object ClassDao {
 
-    private val database= DatabaseManager().getDatabase()
 
     fun getClassById(classId: String) =
-        Classes.select(Classes.id.eq(classId))
+        Classes.select(Classes.id.eq(classId)).map {
+            it.toClass()
+        }.firstOrNull()
 
     fun createClass(classI: Class) =
         Classes.insertClass(classI)
 
     fun getMembersOfClass(classId: String) =
-        MemberClass.select(MemberClass.classId.eq(classId))
+        MemberClass
+            .slice(MemberClass.studentId)
+            .select(MemberClass.classId.eq(classId))
+            .map {
+                it[MemberClass.studentId]
+            }
 
 }
 

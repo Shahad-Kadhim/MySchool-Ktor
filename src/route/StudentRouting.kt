@@ -2,9 +2,10 @@ package com.example
 
 import com.example.authentication.JwtConfig
 import com.example.models.Student
-import com.example.repostiory.Repository
+import com.example.repostiory.StudentRepository
 import com.example.requestBody.LoginBody
-import com.example.requestBody.RegisterBody
+import com.example.requestBody.StudentRegisterBody
+import com.example.route.classRepository
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.request.*
@@ -12,21 +13,20 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import java.util.*
 
+val studentRepository =StudentRepository()
 fun Route.getAllStudent(){
     get("/allStudent"){
-        call.respond(Repository.getAllStudent())
+        call.respond(studentRepository.getAllStudent())
     }
 }
 
 fun Route.registerStudent(){
-    post("/register"){
+    post("/student/register"){
         try {
-            val newUser = call.receive<RegisterBody>()
+            val newUser = call.receive<StudentRegisterBody>()
 
             val student = Student(
-                id =  UUID.randomUUID().toString().apply {
-                                                         println("--------------------------------"+this)
-                },
+                id =  UUID.randomUUID().toString(),
                 name = newUser.name,
                 password= newUser.password,
                 age = newUser.age,
@@ -34,14 +34,9 @@ fun Route.registerStudent(){
                 phone = newUser.phone,
                 stage = newUser.stage
             )
+            studentRepository.addStudent(student)
+            call.respond(jwtConfig.generateToken(JwtConfig.JwtUser( student.name,student.password)))
 
-//            if(
-                (Repository.addStudent(student))
-//            ){
-                call.respond(jwtConfig.generateToken(JwtConfig.JwtUser( student.name,student.password)))
-//            }else{
-//                call.respond(HttpStatusCode.Conflict,"Already account register")
-//            }
         }catch (e:Exception){
             println(e.message)
             call.respond(HttpStatusCode.BadRequest)
@@ -51,10 +46,10 @@ fun Route.registerStudent(){
 }
 
 fun Route.loginStudent(){
-    post("/login") {
+    post("/student/login") {
         val loginBody = call.receive<LoginBody>()
 
-        val user = Repository.getUserByNameAndPassword(loginBody.name, loginBody.password)
+        val user = studentRepository.getUserByNameAndPassword(loginBody.name, loginBody.password)
 
         if (user == null) {
             call.respond(HttpStatusCode.Unauthorized, "Invalid credentials!")
@@ -63,5 +58,16 @@ fun Route.loginStudent(){
 
         val token = jwtConfig.generateToken(JwtConfig.JwtUser(user.name, user.password))
         call.respond(token)
+    }
+}
+
+
+fun Route.getAllClass(){
+    get("/student/{studentId}/classes"){
+        call.parameters["studentId"]?.let { studentId ->
+            studentRepository.getStudentClasses(studentId)
+        }?.let { classes ->
+            call.respond(classes)
+        }
     }
 }

@@ -1,6 +1,6 @@
 package com.example.requestBody
 
-data class RegisterBody(
+data class StudentRegisterBody(
     val name: String,
     val password: String,
     var age: Int,

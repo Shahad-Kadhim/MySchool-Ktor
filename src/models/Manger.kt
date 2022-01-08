@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Manger(
-    val id: Long ,
+    val id: String ,
     var name :String ,
-    var schoolId: Long
+    var schoolId: String
 )

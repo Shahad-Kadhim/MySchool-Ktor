@@ -4,11 +4,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Post (
-    val id: Long,
-    val classId: Long,
+    val id: String,
+    val classId: String,
     var title: String,
     var content: String ,
-    val authorId: Long ,
+    val authorId: String ,
     val datePosted: String ,
     var lastDateUpdated: String =datePosted,  // default take date of posted this post
 )

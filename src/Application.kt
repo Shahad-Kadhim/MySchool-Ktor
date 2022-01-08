@@ -3,6 +3,7 @@ package com.example
 import com.example.authentication.JwtConfig
 import com.example.database.entities.*
 import com.example.database.DatabaseManager
+import com.example.route.*
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.auth.jwt.*
@@ -53,6 +54,11 @@ fun Application.module(testing: Boolean = false) {
         registerStudent()
         loginStudent()
         getAllStudent()
+        registerTeacher()
+        loginTeacher()
+        createClass()
+        getClassById()
+        getClassMembers()
     }
 }
 

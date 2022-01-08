@@ -1,6 +1,5 @@
 package com.example.database.entities
 
-import com.example.models.Teacher
 import org.jetbrains.exposed.sql.Table
 
 

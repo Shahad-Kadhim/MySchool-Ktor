@@ -26,7 +26,6 @@ class StudentDao {
     fun getStudentByNameAndPassword(name:String,password: String) : Student? =
         transaction {
             Students
-                .slice(Students.id)
                 .select{
                     Students.name.eq(name) and Students.password.eq(password)
                 }
@@ -34,10 +33,6 @@ class StudentDao {
                 ?.toStudent()
 
         }
-//
-//    fun getStudentClasses(studentId: Long) =
-//        database.sequenceOf(DBMemberClassTable).filter { it.studentId eq studentId }.toList()
-//
 
 
     fun createStudent(student: Student) =
@@ -64,5 +59,14 @@ class StudentDao {
                 it[stage]=student.stage
             }
         }
+
+
+    fun getStudentClasses(studentId: String) =
+        MemberClass
+            .slice(MemberClass.classId ,MemberClass.dateJoined)
+            .select{(MemberClass.studentId.eq(studentId))}
+            .map {
+                it[MemberClass.classId]
+            }
 
 }

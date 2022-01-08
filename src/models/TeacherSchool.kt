@@ -4,6 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class TeacherSchool(
-    val TeacherId: Long,
-    val SchoolId: Long,
+    val TeacherId: String,
+    val SchoolId: String,
 )

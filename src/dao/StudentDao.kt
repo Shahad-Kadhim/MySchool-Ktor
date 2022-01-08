@@ -2,27 +2,38 @@ package com.example.dao
 
 import com.example.database.entities.*
 import com.example.models.Student
-import com.maaxgr.database.DatabaseManager
-import org.ktorm.database.Database
-import org.ktorm.dsl.*
-import org.ktorm.entity.*
+import com.example.util.insertStudent
+import com.example.util.toStudent
+import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.transactions.transaction
 
 class StudentDao {
 
-    private val Database.student get()= this.sequenceOf(DBStudentTable)
-    private val students =  DatabaseManager().getDatabase().student
-
-    fun getAllStudents(): List<DBStudentEntity> =
-        students.toList()
-
-
-    fun getStudentById(id: Long): DBStudentEntity? =
-        students.find { it.id eq id }
+    fun getAllStudents(): List<Student> =
+        transaction {
+            Students.selectAll().map {
+                it.toStudent()
+            }
+        }
 
 
-    fun getStudentByNameAndPassword(name:String,password: String) : DBStudentEntity? =
-        students.find{ it.name eq name and ( it.password eq password) }
+    fun getStudentById(id: String): Student? =
+        transaction {
+            Students.select(Students.id.eq(id)).firstOrNull()?.toStudent()
+        }
 
+    fun getStudentByNameAndPassword(name:String,password: String) : Student? =
+        transaction {
+            Students
+                .slice(Students.id)
+                .select{
+                    Students.name.eq(name) and Students.password.eq(password)
+                }
+                .firstOrNull()
+                ?.toStudent()
+
+        }
 //
 //    fun getStudentClasses(studentId: Long) =
 //        database.sequenceOf(DBMemberClassTable).filter { it.studentId eq studentId }.toList()
@@ -30,24 +41,28 @@ class StudentDao {
 
 
     fun createStudent(student: Student) =
-        students.add(DBStudentEntity{
-            age =student.age
-            password= student.password
-            name =student.name
-            note= student.note
-            stage= student.stage
-            phone =student.phone
-        }) >= 1
+        transaction {
+            Students.insertStudent(student)
+        }
 
 
 
-    fun removeStudent(id: Long): Boolean =
-        students.removeIf {
-            it.id eq id
-        } > 0
+    fun removeStudent(id: String): Boolean =
+        transaction {
+            Students.deleteWhere { Students.id.eq(id) } == 1
+        }
 
 
-    fun updateStudent(student: DBStudentEntity) =
-        students.update(student)
+    fun updateStudent(student: Student) =
+        transaction {
+            Students.update({ Students.id eq student.id }){
+                it[name] = student.name
+                it[password]= student.password
+                it[phone]= student.phone
+                it[age]= student.age
+                it[note]= student.note
+                it[stage]=student.stage
+            }
+        }
 
 }

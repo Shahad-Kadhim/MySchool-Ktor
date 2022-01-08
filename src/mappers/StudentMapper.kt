@@ -1,21 +1,16 @@
 package com.example.mappers
 
 import com.example.Mapper
-import com.example.database.entities.DBStudentEntity
+import com.example.database.entities.Students
 import com.example.models.Student
+import com.example.util.toStudent
+import org.jetbrains.exposed.sql.selectAll
 
-class StudentMapper: Mapper<DBStudentEntity,Student> {
+class StudentMapper: Mapper<Students,Student> {
 
-    override fun map(input: DBStudentEntity): Student =
-        Student(
-            id = input.id,
-            name =input.name,
-            password = input.password,
-            phone = input.phone,
-            age = input.age,
-            stage = input.stage,
-            note = input.note
-        )
-
+    override fun map(input: Students): Student =
+        Students.selectAll().map {
+            it.toStudent()
+        }.first()
 
 }

@@ -1,12 +1,13 @@
-package com.maaxgr.database
+package com.example.database
 
-import org.ktorm.database.Database
+import org.jetbrains.exposed.sql.Database
+
 
 class DatabaseManager {
 
     private val database = Database.connect(
         url = "jdbc:mysql://localhost:3306/my_school?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
-        driver = "com.mysql.cj.jdbc.Driver",
+        driver = "org.h2.Driver",
         user = "root",
         password = ""
     )

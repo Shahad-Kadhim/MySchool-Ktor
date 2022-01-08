@@ -1,9 +1,10 @@
 package com.example.models
 
 import kotlinx.serialization.Serializable
+import java.util.*
 
 @Serializable
 data class StudentClasses(
-    val classId: Long,
-    val joinDate: String
+    val classId: String,
+    val joinDate: Date
 )

@@ -14,33 +14,31 @@ object Repository {
     private val studentDao= StudentDao()
     private val memberClassMapper =MemberClassMapper()
     fun getAllStudent(): List<Student> =
-        studentDao.getAllStudents().map { studentMapper.map(it) }
+        studentDao.getAllStudents()
 
 //    fun getStudentClasses(studentId: Long): List<StudentClasses> =
 //        studentDao.getStudentClasses(studentId).map {
 //            memberClassMapper.map(it)
 //        }
 
-    fun getClassById(classId: Long)=
+    fun getClassById(classId: String)=
         classDao.getClassById(classId)
 
     fun addStudent(student: Student) =
         studentDao.createStudent(student)
 
-    fun deleteStudent(studentId: Long) =
+    fun deleteStudent(studentId: String) =
         studentDao.removeStudent(studentId)
 
     fun getUserByNameAndPassword(name: String, password: String): Student? =
-       (studentDao.getStudentByNameAndPassword(name,password))?.let {
-           studentMapper.map(it)
-       }
+       studentDao.getStudentByNameAndPassword(name,password)
 
 
     fun addClass(mClass: Class): Any =
         classDao.createClass(mClass)
 
 
-    fun getMembers(classId: Long) =
+    fun getMembers(classId: String) =
         classDao.getMembersOfClass(classId)
 
 }

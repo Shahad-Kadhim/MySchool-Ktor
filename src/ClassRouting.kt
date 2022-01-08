@@ -6,6 +6,7 @@ import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import java.util.*
 
 //fun Route.getAllClass(){
 //    get("{studentId}/classes"){
@@ -18,46 +19,45 @@ import io.ktor.routing.*
 //}
 
 fun Route.getClassById(){
-    get("/classes/{classId}") {
-        call.parameters["classId"]?.toLongOrNull()?.let { classId ->
-            Repository.getClassById(classId)?.let {
-                call.respond(it)
-            } ?: call.respond(HttpStatusCode.NotFound, "this Id : $classId not found")
-        }
-    }
+//    get("/classes/{classId}") {
+//        call.parameters["classId"]?.let { classId ->
+//            Repository.getClassById(classId)?.let {
+//                call.respond(it)
+//            } ?: call.respond(HttpStatusCode.NotFound, "this Id : $classId not found")
+//        }
+//    }
 }
 
 fun Route.createClass() {
-    get("/createClass") {
-        call.request.also {
-            it.queryParameters["className"]?.let { className ->
-                it.queryParameters["schoolId"]?.toLongOrNull()?.let { schoolId ->
-                    it.queryParameters["teacherId"]?.toLongOrNull()?.let { teacherId ->
-                        it.queryParameters["stage"]?.toIntOrNull()?.let { stage ->
-                            call.respond(
-                                Repository.addClass(
-                                    Class(
-                                        0,
-                                        className,
-                                        teacherId,
-                                        schoolId,
-                                        stage
-                                    )
-                                )
-                            )
-                        }
-                    }
-                }
-            }
-        }
-    }
+//    get("class/new") {
+//        call.request.also {
+//            it.queryParameters["className"]?.let { className ->
+//                it.queryParameters["schoolId"]?.let { schoolId ->
+//                    it.queryParameters["teacherId"]?.let { teacherId ->
+//                        it.queryParameters["stage"]?.toIntOrNull()?.let { stage ->
+//                            call.respond(
+//                                Repository.addClass(
+//                                    Class(
+//                                        UUID.randomUUID().toString(),
+//                                        className,
+//                                        teacherId,
+//                                        schoolId,
+//                                        stage
+//                                    )
+//                                )
+//                            )
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
 }
 
 fun Route.getClassMembers(){
-    get("{classId}/members") {
-        call.parameters["classId"]?.toLongOrNull()?.let {
-            Repository.getMembers(it)
-        }
-
-    }
+//    get("class/{classId}/members") {
+//        call.parameters["classId"]?.let {
+//            Repository.getMembers(it)
+//        }
+//    }
 }

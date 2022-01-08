@@ -10,6 +10,7 @@ import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import java.util.*
 
 fun Route.getAllStudent(){
     get("/allStudent"){
@@ -23,7 +24,9 @@ fun Route.registerStudent(){
             val newUser = call.receive<RegisterBody>()
 
             val student = Student(
-                id = 0,
+                id =  UUID.randomUUID().toString().apply {
+                                                         println("--------------------------------"+this)
+                },
                 name = newUser.name,
                 password= newUser.password,
                 age = newUser.age,
@@ -32,12 +35,15 @@ fun Route.registerStudent(){
                 stage = newUser.stage
             )
 
-            if((Repository.addStudent(student))){
+//            if(
+                (Repository.addStudent(student))
+//            ){
                 call.respond(jwtConfig.generateToken(JwtConfig.JwtUser( student.name,student.password)))
-            }else{
-                call.respond(HttpStatusCode.Conflict,"Already account register")
-            }
+//            }else{
+//                call.respond(HttpStatusCode.Conflict,"Already account register")
+//            }
         }catch (e:Exception){
+            println(e.message)
             call.respond(HttpStatusCode.BadRequest)
         }
 

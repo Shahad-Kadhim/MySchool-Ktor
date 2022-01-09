@@ -1,1 +1,1 @@
-web: java -jar build/MySchool.jar
+web: java -jar build/libs/MySchool.jar

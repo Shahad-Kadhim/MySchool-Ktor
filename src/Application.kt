@@ -9,6 +9,7 @@ import io.ktor.auth.*
 import io.ktor.auth.jwt.*
 import io.ktor.features.*
 import io.ktor.gson.*
+import io.ktor.response.*
 import io.ktor.routing.*
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -51,6 +52,9 @@ fun Application.module(testing: Boolean = false) {
         }
     }
     routing {
+        get("/hh"){
+            call.respond("jgsjgsj")
+        }
         registerStudent()
         loginStudent()
         getAllStudent()

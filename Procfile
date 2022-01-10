@@ -1,2 +1,1 @@
-web: java $JAVA_OPTS -jar target/dependency/webapp-runner.jar --port $PORT target/MySchool.war
-
+web:    java -jar build/libs/MySchool.jar

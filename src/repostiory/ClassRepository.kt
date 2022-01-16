@@ -3,8 +3,10 @@ package com.example.repostiory
 import com.example.dao.ClassDao
 import com.example.models.Class
 
-class ClassRepository {
-    private val  classDao = ClassDao
+class ClassRepository(
+    private val  classDao: ClassDao
+) {
+
 
     fun getClassById(classId: String)=
         classDao.getClassById(classId)

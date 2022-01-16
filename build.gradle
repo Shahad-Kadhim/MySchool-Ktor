@@ -15,9 +15,14 @@ group 'com.example'
 version '0.0.1'
 mainClassName = "io.ktor.server.netty.EngineMain"
 
+group 'org.koin.sample.ktor'
+version '1.0-SNAPSHOT'
+
 tasks.create("stage") {
     dependsOn("installDist")
 }
+
+
 
 sourceSets {
     main.kotlin.srcDirs = main.java.srcDirs = ['src']
@@ -57,12 +62,7 @@ dependencies {
 
     implementation group: 'org.jetbrains.exposed', name: 'exposed', version: '0.6.3'
     implementation 'com.h2database:h2:2.0.206'
+    // Koin for Ktor
+    implementation "io.insert-koin:koin-ktor:$koin_version"
 
-}
-task fatJar(type: Jar) {
-    manifest {
-        attributes 'Main-Class': mainClassName
-    }
-    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
 }

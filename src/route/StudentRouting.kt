@@ -1,19 +1,21 @@
-package com.example
+package com.example.route
 
 import com.example.authentication.JwtConfig
+import com.example.jwtConfig
 import com.example.models.Student
 import com.example.repostiory.StudentRepository
 import com.example.requestBody.LoginBody
 import com.example.requestBody.StudentRegisterBody
-import com.example.route.classRepository
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import org.koin.java.KoinJavaComponent.inject
 import java.util.*
 
-val studentRepository =StudentRepository()
+private val studentRepository: StudentRepository by inject(StudentRepository::class.java)
+
 fun Route.getAllStudent(){
     get("/allStudent"){
         call.respond(studentRepository.getAllStudent())

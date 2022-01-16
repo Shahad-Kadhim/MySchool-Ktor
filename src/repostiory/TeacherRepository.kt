@@ -1,25 +1,26 @@
 package com.example.repostiory
 
 import com.example.dao.TeacherDao
-import com.example.models.Student
 import com.example.models.Teacher
 
-class TeacherRepository {
+class TeacherRepository(
+    private val teacherDao: TeacherDao
+) {
 
-    val dao = TeacherDao()
+
 
     fun addTeacher(teacher: Teacher){
-        dao.createTeacher(teacher)
+        teacherDao.createTeacher(teacher)
     }
 
     fun getTeacherById(id: String)=
-        dao.getTeacherById(id)
+        teacherDao.getTeacherById(id)
 
     fun deleteTeacher(id: String) =
-        dao.removeTeacher(id)
+        teacherDao.removeTeacher(id)
 
     fun getTeacherByNameAndPassword(name: String, password: String): Teacher? =
-        dao.getTeacherByNameAndPassword(name,password)
+        teacherDao.getTeacherByNameAndPassword(name,password)
 
 
 

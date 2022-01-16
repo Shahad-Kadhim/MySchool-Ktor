@@ -1,15 +1,11 @@
 package com.example.repostiory
 
-import com.example.dao.ClassDao
-import com.example.dao.StudentDao
-import com.example.mappers.MemberClassMapper
-import com.example.mappers.StudentMapper
-import com.example.models.Class
-import com.example.models.StudentClasses
+import dao.StudentDao
 import com.example.models.Student
 
-class StudentRepository {
-    private val studentDao= StudentDao()
+class StudentRepository(
+    private val studentDao: StudentDao
+) {
 
     fun getAllStudent(): List<Student> =
         studentDao.getAllStudents()

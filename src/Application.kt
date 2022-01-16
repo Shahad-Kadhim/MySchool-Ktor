@@ -3,18 +3,21 @@ package com.example
 import com.example.authentication.JwtConfig
 import com.example.database.DatabaseManager
 import com.example.database.entities.*
+import com.example.di.appModule
 import com.example.route.*
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.auth.jwt.*
 import io.ktor.features.*
 import io.ktor.gson.*
-import io.ktor.response.*
 import io.ktor.routing.*
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.koin.ktor.ext.Koin
 
-fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
+fun main(args: Array<String>) {
+    io.ktor.server.netty.EngineMain.main(args)
+}
 
 
 val jwtConfig = JwtConfig(System.getenv("KTOR_JWT_SECRET"))
@@ -51,10 +54,13 @@ fun Application.module(testing: Boolean = false) {
             setPrettyPrinting()
         }
     }
+
+    install(Koin) {
+        modules(appModule)
+    }
+
     routing {
-        get("/hh"){
-            call.respond("jgsjgsj")
-        }
+
         registerStudent()
         loginStudent()
         getAllStudent()

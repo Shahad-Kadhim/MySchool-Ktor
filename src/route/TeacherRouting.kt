@@ -11,9 +11,10 @@ import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import org.koin.java.KoinJavaComponent.inject
 import java.util.*
 
-val repository= TeacherRepository()
+private val teacherRepository: TeacherRepository by inject(TeacherRepository::class.java)
 
 fun Route.registerTeacher(){
     post("/teacher/new"){
@@ -27,7 +28,7 @@ fun Route.registerTeacher(){
                 teachingSpecialization = newUser.teachingSpecialization,
                 phone = newUser.phone,
             )
-            repository.addTeacher(teacher)
+            teacherRepository.addTeacher(teacher)
             call.respond(jwtConfig.generateToken(JwtConfig.JwtUser( teacher.name,teacher.password)))
 
         }catch (e:Exception){
@@ -41,7 +42,7 @@ fun Route.loginTeacher(){
     post("/teacher/login") {
         val loginBody = call.receive<LoginBody>()
 
-        val user = repository.getTeacherByNameAndPassword(loginBody.name, loginBody.password)
+        val user = teacherRepository.getTeacherByNameAndPassword(loginBody.name, loginBody.password)
 
         if (user == null) {
             call.respond(HttpStatusCode.Unauthorized, "Invalid credentials!")

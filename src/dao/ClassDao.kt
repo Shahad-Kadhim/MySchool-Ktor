@@ -2,14 +2,12 @@ package com.example.dao
 
 import com.example.database.entities.*
 import com.example.models.Class
-import com.example.models.StudentClasses
 import com.example.util.insertClass
 import com.example.util.toClass
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.select
 
-object ClassDao {
-
+class ClassDao {
 
     fun getClassById(classId: String) =
         Classes.select(Classes.id.eq(classId)).map {
@@ -28,33 +26,3 @@ object ClassDao {
             }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-//
-//private fun DBClassEntity.toClassModel() =
-//    Class(
-//        this.id,
-//        this.name,
-//        this.teacherId.id,
-//        this.schoolId.id,
-//        this.stage
-//    )
-//
-//private fun DBStudentEntity.toClassModel() =
-//    Student(
-//        this.id,
-//        this.name,
-//        this.teacherId.id,
-//        this.schoolId.id,
-//        this.stage
-//    )

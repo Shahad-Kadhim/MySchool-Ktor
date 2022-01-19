@@ -53,6 +53,7 @@ dependencies {
     implementation "org.ktorm:ktorm-core:3.2.0"
     implementation "org.ktorm:ktorm-support-mysql:3.2.0"
     implementation "io.ktor:ktor-serialization:$ktor_version"
+    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.28'
 
 
     //auth
@@ -65,4 +66,12 @@ dependencies {
     // Koin for Ktor
     implementation "io.insert-koin:koin-ktor:$koin_version"
 
+}
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
 }

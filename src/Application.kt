@@ -20,7 +20,7 @@ fun main(args: Array<String>) {
 }
 
 
-val jwtConfig = JwtConfig(System.getenv("KTOR_JWT_SECRET"))
+val jwtConfig = JwtConfig(System.getenv("KTOR_JWT_SECRET")?: "default_value")
 
 @Suppress("unused") // Referenced in application.conf
 @kotlin.jvm.JvmOverloads

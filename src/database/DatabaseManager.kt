@@ -18,20 +18,19 @@ class DatabaseManager {
                     host = it.host
                     port = it.port
                     databaseName = it.path.substring(1)
-                    it.userInfo.split(';').also {
-                        databaseUserName= it[1]
-                        databasePassword =it[2]
-                    }
-
+//                    it.userInfo.split(';').also {
+//                        databaseUserName= it[1]
+//                        databasePassword =it[2]
+//                    }
                 }
             }else{
                 host= System.getenv("DB_HOST")
                 port= System.getenv("DB_PORT").toInt()
                 databaseName= System.getenv("DB_NAME")
-                databaseUserName= System.getenv("DB_USER")
-                databasePassword= System.getenv("DB_PASSWORD")
-
             }
+            databaseUserName= System.getenv("DB_USER")
+            databasePassword= System.getenv("DB_PASSWORD")
+
         }
     }
     private val database = Database.connect(

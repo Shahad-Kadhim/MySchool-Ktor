@@ -13,7 +13,7 @@ apply plugin: 'application'
 
 group 'com.example'
 version '0.0.1'
-mainClassName = "io.ktor.server.netty.EngineMain"
+mainClassName = "ApplicationKt"
 
 jar{
     manifest {

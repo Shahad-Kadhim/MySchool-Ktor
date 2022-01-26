@@ -13,7 +13,7 @@ apply plugin: 'application'
 
 group 'com.example'
 version '0.0.1'
-mainClassName = "MainKt"
+mainClassName = "com.example.ApplicationKt"
 
 jar{
     manifest {

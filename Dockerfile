@@ -1,17 +1,11 @@
-FROM openjdk:11-jdk-slim
+FROM openjdk:11 as builder
 
-WORKDIR /src
-COPY . /src
+COPY . .
 
-RUN apt-get update
-RUN apt-get install -y dos2unix
-RUN dos2unix gradlew
+RUN ./gradlew jar
 
-RUN bash gradlew fatJar
+FROM openjdk:11
 
-WORKDIR /run
-RUN cp /src/build/libs/*.jar /run/server.jar
+COPY --from=builder /build/libs/my-school.jar ./my-school.jar
 
-EXPOSE 7777
-
-CMD java -jar /run/server.jar
+CMD ["java","-jar","my-school.jar"]

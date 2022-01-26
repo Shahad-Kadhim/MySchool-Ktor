@@ -1,1 +1,1 @@
-web: java -jar build/libs/example-0.0.1..jar
+web: java -jar build/libs/example-1.0-SNAPSHOT.jar

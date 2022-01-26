@@ -56,6 +56,8 @@ dependencies {
     implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.28'
 
 
+    implementation "org.postgresql:postgresql:42.2.5"
+
     //auth
     implementation "io.ktor:ktor-auth:$ktor_version"
 

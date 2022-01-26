@@ -1,0 +1,22 @@
+version: "3"  # optional since v1.27.0
+services:
+  my_school_database:
+    image: postgres:11
+    ports:
+      - 5555:5432
+    environment :
+      - POSTGRES_USER=my_school_user
+      - POSTGRES_PASSWORD=my_school123
+      - POSTGRES_DB=my_school_db
+  web:
+    build: .
+    ports:
+      - 8080:8080
+    depends_on:
+      - my_school_database
+    environment:
+      - DB_USER=my_school_user
+      - DB_PORT=5432
+      - DB_HOST=my_school_database
+      - DB_PASSWORD=my_school123
+      - DB_NAME=my_school_db

@@ -20,7 +20,7 @@ import org.koin.ktor.ext.Koin
 fun main(args: Array<String>) {
     embeddedServer(
         Netty,
-        System.getenv("port").toInt() ?: 7777,
+        System.getenv("PORT").toInt() ?: 7777,
         module = Application::module
     ).start()
 }

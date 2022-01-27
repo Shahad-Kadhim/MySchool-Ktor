@@ -1,1 +1,1 @@
-web: java -jar build/libs/my-school.jar
+worker: java -jar build/libs/my-school.jar

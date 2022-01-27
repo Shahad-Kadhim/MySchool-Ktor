@@ -19,8 +19,8 @@ class DatabaseManager {
                     port = it.port
                     databaseName = it.path.substring(1)
                     it.userInfo.split(':').also { info ->
-                        databaseUserName= info[1]
-                        databasePassword =info[2]
+                        databaseUserName= info[0]
+                        databasePassword =info[1]
                     }
                 }
             }else{

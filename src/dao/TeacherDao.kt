@@ -63,7 +63,7 @@ class TeacherDao {
         transaction {
             (Teachers innerJoin Classes)
                 .slice(Classes.id)
-                .select { (Classes.teacherId.eq(Teachers.id)) }
+                .select { (Classes.teacherId.eq(id)) }
                 .map{
                     it[Classes.id]
                 }

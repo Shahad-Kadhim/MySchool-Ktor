@@ -1,6 +1,6 @@
 package com.example.repostiory
 
-import dao.StudentDao
+import com.example.dao.StudentDao
 import com.example.models.Student
 
 class StudentRepository(

@@ -23,5 +23,11 @@ class TeacherRepository(
         teacherDao.getTeacherByNameAndPassword(name,password)
 
 
+    fun getTeacherClasses(id: String)=
+        teacherDao.getClasses(id)
+
+    fun getAllTeacher(): List<Teacher> =
+        teacherDao.getAllTeachers()
+
 
 }

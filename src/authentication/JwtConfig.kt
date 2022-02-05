@@ -2,52 +2,81 @@ package com.example.authentication
 
 import com.auth0.jwt.*
 import com.auth0.jwt.algorithms.Algorithm
+import com.example.secret
+import com.example.util.toRole
 import io.ktor.auth.*
 import io.ktor.auth.jwt.*
+import java.util.*
 
 class JwtConfig(jwtSecret: String) {
 
-    companion object Constants {
+    companion object {
         // jwt config
-        private const val jwtIssuer = "com.example"
-        private const val jwtRealm = "com.example.mySchool"
+         const val jwtIssuer = "com.example"
+         const val jwtRealm = "com.example.mySchool"
+         const val audience = "mySchool"
+
 
         // claims
-        private const val CLAIM_PASSWORD = "password"
-        private const val CLAIM_USERNAME = "name"
+         const val CLAIM_ID = "id"
+         const val CLAIM_ROLE = "role"
     }
 
-    private val jwtAlgorithm = Algorithm.HMAC512(jwtSecret)
-    private val jwtVerifier: JWTVerifier = JWT
-        .require(jwtAlgorithm)
-        .withIssuer(jwtIssuer)
-        .build()
+     val jwtAlgorithm = Algorithm.HMAC512(jwtSecret)
+     val jwtVerifier: JWTVerifier =JWT
+         .require(jwtAlgorithm)
+         .withAudience(audience)
+         .withIssuer(jwtIssuer)
+         .build()
 
 
-    fun generateToken(user: JwtUser): String = JWT.create()
-        .withSubject("Authentication")
-        .withIssuer(jwtIssuer)
-        .withClaim(CLAIM_PASSWORD, user.password)
-        .withClaim(CLAIM_USERNAME, user.name)
-        .sign(jwtAlgorithm)
+    fun generateToken(user: JwtUser): String =
+        JWT.create()
+            .withAudience(audience)
+            .withIssuer(jwtIssuer)
+            .withClaim(CLAIM_ID, user.id)
+            .withClaim(CLAIM_ROLE, user.role.toString())
+            .withExpiresAt(Date(System.currentTimeMillis()+64000000))
+            .sign(jwtAlgorithm)
 
-
-    fun configureKtorFeature(config: JWTAuthenticationProvider.Configuration) = with(config) {
-        verifier(jwtVerifier)
-        realm = jwtRealm
-        validate {
-            val password = it.payload.getClaim(CLAIM_PASSWORD).asString()
-            val name = it.payload.getClaim(CLAIM_USERNAME).asString()
-
-            if (password != null && name != null) {
-                JwtUser(name, password)
-            } else {
-                null
+    fun teacherAuth(auth:Authentication.Configuration){
+        auth.jwt("auth-teacher") {
+            realm = jwtRealm
+            verifier(jwtVerifier)
+            validate{
+                isSameRole(Role.TEACHER,it)
             }
         }
     }
 
+    fun studentAuth(auth:Authentication.Configuration){
+        auth.jwt("auth-student") {
+            realm = jwtRealm
+            verifier(jwtVerifier)
+            validate{
+                isSameRole(Role.STUDENT,it)
+            }
+        }
+    }
 
-    data class JwtUser( val name: String,val password: String): Principal
+    fun mangerAuth(auth:Authentication.Configuration){
+        auth.jwt("auth-manger") {
+            realm = jwtRealm
+            verifier(jwtVerifier)
+            validate{
+                isSameRole(Role.MANGER,it)
+            }
+        }
+    }
+
+    private fun isSameRole(role: Role, credential: JWTCredential): JWTPrincipal?{
+        return  takeIf {
+            credential.payload.getClaim(CLAIM_ID).asString() != null && credential.payload.getClaim(CLAIM_ROLE).asString().toRole() == role
+        }?.let{
+            JWTPrincipal(credential.payload)
+        }
+    }
+
+    data class JwtUser( val id: String,val role: Role): Principal
 
 }

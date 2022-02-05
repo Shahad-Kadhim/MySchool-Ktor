@@ -8,6 +8,7 @@ class ClassRepository(
 ) {
 
 
+
     fun getClassById(classId: String)=
         classDao.getClassById(classId)
 
@@ -17,6 +18,9 @@ class ClassRepository(
 
     fun getMembers(classId: String) =
         classDao.getMembersOfClass(classId)
+
+    fun getAllClasses(): List<Class> =
+        classDao.getAllClasses()
 
 
 }

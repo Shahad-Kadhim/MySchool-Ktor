@@ -8,5 +8,6 @@ object Mangers : Table("manger") {
 
     val id = varchar("id",50).primaryKey()
     val name = varchar("name",30)
+    val password = varchar("password",30)
 
 }

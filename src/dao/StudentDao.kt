@@ -1,4 +1,4 @@
-package dao
+package com.example.dao
 
 import com.example.database.entities.*
 import com.example.models.Student

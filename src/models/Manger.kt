@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class Manger(
     val id: String ,
     var name :String ,
-    var schoolId: String
+    var password: String
 )

@@ -13,6 +13,12 @@ import java.util.*
 
 private val classRepository: ClassRepository by inject(ClassRepository::class.java)
 
+fun Route.getAllClasses(){
+    get("/allClass"){
+        call.respond(classRepository.getAllClasses())
+    }
+}
+
 fun Route.getClassById(){
     get("/class/{classId}") {
         call.parameters["classId"]?.let { classId ->

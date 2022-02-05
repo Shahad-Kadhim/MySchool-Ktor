@@ -23,6 +23,7 @@ class DatabaseManager {
                         databasePassword =info[1]
                     }
                 }
+
             }else{
                 host= System.getenv("DB_HOST")
                 port= System.getenv("DB_PORT").toInt()

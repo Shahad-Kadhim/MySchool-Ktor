@@ -124,6 +124,7 @@ fun Routing.manger() {
     loginManger()
     authenticate("auth-manger") {
         getMangerSchools()
+        getMangerClasses()
     }
 }
 

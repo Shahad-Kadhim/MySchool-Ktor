@@ -75,3 +75,17 @@ fun Route.getMangerSchools(){
         }
     }
 }
+fun Route.getMangerClasses(){
+    get("/manger/classes") {
+        call.principal<JWTPrincipal>()?.let {
+            call.respond(
+                BaseResponse(
+                    HttpStatusCode.OK.value,
+                    mangerRepository.getMangerClasses(
+                        it.payload.getClaim(JwtConfig.CLAIM_ID).asString()
+                    )
+                )
+            )
+        }
+    }
+}

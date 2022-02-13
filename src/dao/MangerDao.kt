@@ -1,10 +1,7 @@
 package com.example.dao
 
 import com.example.database.entities.*
-import com.example.models.Manger
-import com.example.models.School
-import com.example.models.Student
-import com.example.models.Teacher
+import com.example.models.*
 import com.example.util.*
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -18,8 +15,6 @@ class MangerDao {
                 it.toManger()
             }
         }
-
-
 
     fun createManger(manger: Manger) =
         transaction {
@@ -59,9 +54,23 @@ class MangerDao {
     fun getSchools(id: String): List<School> =
         transaction {
             (Mangers innerJoin Schools)
-                .select { (Schools.mangerId.eq(Mangers.id)) }
+                .select { (Schools.mangerId.eq(id)) }
                 .map{
                     School(it[Schools.id],it[Schools.name],it[Schools.mangerId])
+                }
+        }
+
+    fun getClasses(id: String): List<ClassDto> =
+        transaction {
+            (Schools innerJoin Classes)
+                .select {
+                    Classes.schoolId.inList(getSchools(id).map { it.id })
+                }.map {
+                    ClassDto(
+                        it[Classes.id],
+                        it[Classes.name],
+                        Teachers.select(Teachers.id.eq(it[Classes.teacherId])).map {it[Teachers.name]}.firstOrNull() ?: ""
+                    )
                 }
         }
 

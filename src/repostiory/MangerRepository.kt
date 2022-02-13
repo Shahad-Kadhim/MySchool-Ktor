@@ -27,5 +27,8 @@ class MangerRepository(
     fun getAllManger(): List<Manger> =
         mangerDao.getAllMangers()
 
+    fun getMangerClasses(id: String)=
+        mangerDao.getClasses(id)
+
 
 }

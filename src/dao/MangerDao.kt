@@ -56,7 +56,7 @@ class MangerDao {
             (Mangers innerJoin Schools)
                 .select { (Schools.mangerId.eq(id)) }
                 .map{
-                    School(it[Schools.id],it[Schools.name],it[Schools.mangerId])
+                    School(it[Schools.id],it[Schools.name],id)
                 }
         }
 

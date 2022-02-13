@@ -89,3 +89,16 @@ fun Route.getMangerClasses(){
         }
     }
 }
+
+fun Route.removeManger(){
+    post("/manger/remove"){
+        call.principal<JWTPrincipal>()?.let {
+            if(
+                mangerRepository.deleteManger(it.payload.getClaim(JwtConfig.CLAIM_ID).asString())){
+                call.respond(HttpStatusCode.Accepted)
+            }else
+                call.respond(HttpStatusCode.NotFound)
+        }
+
+    }
+}

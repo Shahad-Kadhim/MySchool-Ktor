@@ -125,6 +125,7 @@ fun Routing.manger() {
     authenticate("auth-manger") {
         getMangerSchools()
         getMangerClasses()
+        removeManger()
     }
 }
 

@@ -2,6 +2,7 @@ package com.example.dao
 
 import com.example.database.entities.*
 import com.example.models.Manger
+import com.example.models.School
 import com.example.models.Student
 import com.example.models.Teacher
 import com.example.util.*
@@ -55,13 +56,12 @@ class MangerDao {
         }
 
 
-    fun getSchools(id: String): List<String> =
+    fun getSchools(id: String): List<School> =
         transaction {
             (Mangers innerJoin Schools)
-                .slice(Schools.id)
                 .select { (Schools.mangerId.eq(Mangers.id)) }
                 .map{
-                    it[Schools.id]
+                    School(it[Schools.id],it[Schools.name],it[Schools.mangerId])
                 }
         }
 

@@ -62,7 +62,7 @@ fun Route.loginManger(){
 }
 
 fun Route.getMangerSchools(){
-    get("/manger/classes") {
+    get("/manger/schools") {
         call.principal<JWTPrincipal>()?.let {
             call.respond(
                 BaseResponse(

@@ -52,7 +52,7 @@ fun Route.createSchool() {
                     schoolRepository.addSchool(school)
                     call.respond(HttpStatusCode.Created.value)
                 } catch (e: Exception) {
-                    call.respond(HttpStatusCode.BadRequest.value)
+                    call.respond(HttpStatusCode.BadRequest)
                 }
             }
         }

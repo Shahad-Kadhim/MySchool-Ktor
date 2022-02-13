@@ -40,30 +40,22 @@ fun Route.getSchoolById(){
 
 fun Route.createSchool() {
     post("school/new") {
-        try {
-
-            val schoolName= call.request.queryParameters["name"]
-            call.principal<JwtConfig.JwtUser>()?.id?.apply {
-                println("this is id  : $this")
-            }
-            call.principal<JWTPrincipal>()?.let { jwtUser->
-//                println(jwtUser.id+jwtUser.name+jwtUser.password)
-                schoolName?.let { schoolName ->
-                    val school = School(
-                        id = UUID.randomUUID().toString(),
-                        name = schoolName,
-                        mangerId = jwtUser.payload.getClaim(JwtConfig.CLAIM_ID).asString().apply {
-                            println(this)
-                        }
-                    )
+        val schoolName = call.request.queryParameters["name"]
+        call.principal<JWTPrincipal>()?.let { jwtUser ->
+            schoolName?.let { schoolName ->
+                val school = School(
+                    id = UUID.randomUUID().toString(),
+                    name = schoolName,
+                    mangerId = jwtUser.payload.getClaim(JwtConfig.CLAIM_ID).asString()
+                )
+                try {
                     schoolRepository.addSchool(school)
-                    call.respond(HttpStatusCode.Created)
+                    call.respond(HttpStatusCode.Created.value)
+                } catch (e: Exception) {
+                    call.respond(HttpStatusCode.BadRequest.value)
                 }
             }
-        }catch (e:Exception){
-            call.respond(HttpStatusCode.BadRequest)
         }
-
     }
 }
 

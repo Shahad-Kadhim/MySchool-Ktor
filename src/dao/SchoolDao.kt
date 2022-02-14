@@ -48,6 +48,19 @@ class SchoolDao {
                 .map { it[Schools.id] }.firstOrNull()
         }
 
+    fun getSchoolTeacherByName(schoolName: String ,teacherId: String) =
+        transaction {
+            getSchoolByName(schoolName)?.takeIf {
+                TeachersSchool
+                    .select(TeachersSchool.teacherId.eq(teacherId))
+                    .map { it[TeachersSchool.schoolId] }.contains(it)
+            }?.let {
+                it
+            }
+        }
+
+
+
     fun addTeacher(schoolId: String, teacherId: String) {
         transaction {
             TeachersSchool.joinTeacher(schoolId,teacherId)
@@ -64,6 +77,7 @@ class SchoolDao {
                 it.toTeacherList()
             }
         }
+
 
 
 }

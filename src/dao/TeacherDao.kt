@@ -2,6 +2,7 @@ package com.example.dao
 
 import com.example.database.entities.Classes
 import com.example.database.entities.Teachers
+import com.example.database.entities.TeachersSchool
 import com.example.models.ClassDto
 import com.example.models.Teacher
 import com.example.util.insertTeacher

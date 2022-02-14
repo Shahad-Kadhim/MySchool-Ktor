@@ -26,6 +26,9 @@ class SchoolRepository(
     fun getSchoolByName(schoolName: String): String? =
        schoolDao.getSchoolByName(schoolName)
 
+    fun getSchoolTeacherByNameSchool(schoolName: String, teacherId: String): String? =
+        schoolDao.getSchoolTeacherByName(schoolName,teacherId)
+
     fun addTeacher(schoolId: String, teacherId: String) {
         schoolDao.addTeacher(schoolId,teacherId)
     }

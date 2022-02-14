@@ -6,4 +6,5 @@ import kotlinx.serialization.Serializable
 data class TeacherSchool(
     val TeacherId: String,
     val SchoolId: String,
+    val joinDate: Long
 )

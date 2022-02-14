@@ -2,8 +2,10 @@ package com.example.route
 
 import com.auth0.jwt.JWT
 import com.example.authentication.JwtConfig
+import com.example.database.entities.TeachersSchool
 import com.example.models.BaseResponse
 import com.example.models.School
+import com.example.models.TeacherSchool
 import com.example.repostiory.SchoolRepository
 import io.ktor.application.*
 import io.ktor.auth.*
@@ -12,6 +14,8 @@ import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.koin.java.KoinJavaComponent.inject
 import java.util.*
 
@@ -80,11 +84,15 @@ fun Route.joinToSchool() {
         call.principal<JWTPrincipal>()?.let { jwt ->
             schoolName?.let {
                 schoolRepository.getSchoolByName(it)?.let { schoolId ->
-                    schoolRepository
-                        .addTeacher(
+                    try {
+                        schoolRepository.addTeacher(
                             schoolId,
                             jwt.payload.getClaim(JwtConfig.CLAIM_ID).asString().toString()
                         )
+                        call.respond(HttpStatusCode.OK.value)
+                    }catch (e:Exception){
+                        call.respond(HttpStatusCode.BadRequest)
+                    }
                 }
             }
         }
@@ -99,5 +107,22 @@ fun Route.getTeachers(){
                     call.respond(BaseResponse(HttpStatusCode.OK.value,schoolRepository.getTeachers(schoolId)))
                 }
         }
+    }
+}
+//for test
+fun Route.getAllTeacherSchool(){
+    get("/allTeacherSchool"){
+        call.respond(
+            transaction {
+                TeachersSchool.selectAll().map {
+                    TeacherSchool(
+                        it[TeachersSchool.teacherId],
+                        it[TeachersSchool.schoolId],
+                        it[TeachersSchool.dateJoined]
+                    )
+                }
+
+            }
+        )
     }
 }

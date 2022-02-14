@@ -89,6 +89,7 @@ fun Routing.testRoute() {
     getAllTeacher()
     getAllSchool()
     getAllManger()
+    getAllTeacherSchool()
 }
 
 fun Routing.student() {

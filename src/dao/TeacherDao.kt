@@ -1,13 +1,10 @@
 package com.example.dao
 
 import com.example.database.entities.Classes
-import com.example.database.entities.Students
 import com.example.database.entities.Teachers
-import com.example.models.Student
+import com.example.models.ClassDto
 import com.example.models.Teacher
-import com.example.util.insertStudent
 import com.example.util.insertTeacher
-import com.example.util.toStudent
 import com.example.util.toTeacher
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -59,13 +56,17 @@ class TeacherDao {
         }
 
 
-    fun getClasses(id: String): List<String> =
+    fun getClasses(id: String): List<ClassDto> =
         transaction {
             (Teachers innerJoin Classes)
                 .slice(Classes.id)
                 .select { (Classes.teacherId.eq(id)) }
                 .map{
-                    it[Classes.id]
+                    ClassDto(
+                        it[Classes.id],
+                        it[Classes.name],
+                        getTeacherById(id)?.name ?: ""
+                    )
                 }
         }
 

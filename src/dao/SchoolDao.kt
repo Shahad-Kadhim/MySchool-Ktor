@@ -2,11 +2,11 @@ package com.example.dao
 
 import com.example.database.entities.*
 import com.example.models.School
-import com.example.models.Student
-import com.example.util.insertSchool
-import com.example.util.toSchool
-import com.example.util.toStudent
+import com.example.models.Teacher
+import com.example.models.TeacherList
+import com.example.util.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -41,4 +41,29 @@ class SchoolDao {
                     it[Classes.id]
                 }
         }
+
+    fun getSchoolByName(schoolName: String): String? =
+        transaction {
+            Schools.select(Schools.name.eq(schoolName))
+                .map { it[Schools.id] }.firstOrNull()
+        }
+
+    fun addTeacher(schoolId: String, teacherId: String) {
+        transaction {
+            TeachersSchool.joinTeacher(schoolId,teacherId)
+        }
+    }
+
+    fun getTeachers(schoolId: String): List<TeacherList> =
+        transaction {
+            Teachers.select(Teachers.id.inList(
+                TeachersSchool
+                    .select(TeachersSchool.schoolId.eq(schoolId))
+                    .map { it[TeachersSchool.teacherId] }
+            )).map {
+                it.toTeacherList()
+            }
+        }
+
+
 }

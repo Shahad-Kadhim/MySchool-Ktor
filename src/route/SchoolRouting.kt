@@ -73,3 +73,31 @@ fun Route.getSchoolClasses(){
 }
 
 
+
+fun Route.joinToSchool() {
+    post("/teacher/joinTeacher") {
+        val schoolName = call.request.queryParameters["school_name"]
+        call.principal<JWTPrincipal>()?.let { jwt ->
+            schoolName?.let {
+                schoolRepository.getSchoolByName(it)?.let { schoolId ->
+                    schoolRepository
+                        .addTeacher(
+                            schoolId,
+                            jwt.payload.getClaim(JwtConfig.CLAIM_ID).asString().toString()
+                        )
+                }
+            }
+        }
+    }
+}
+
+fun Route.getTeachers(){
+    get("/school/teachers") {
+        val schoolName = call.request.queryParameters["school_name"]
+            schoolName?.let {
+                schoolRepository.getSchoolByName(it)?.let { schoolId ->
+                    call.respond(BaseResponse(HttpStatusCode.OK.value,schoolRepository.getTeachers(schoolId)))
+                }
+        }
+    }
+}

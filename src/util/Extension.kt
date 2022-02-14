@@ -26,6 +26,13 @@ fun ResultRow.toTeacher() = Teacher(
     phone = this[Teachers.phone],
 )
 
+fun ResultRow.toTeacherList() = TeacherList(
+    id=this[Teachers.id],
+    name = this[Teachers.name],
+    teachingSpecialization = this[Teachers.teachingSpecialization],
+    phone = this[Teachers.phone],
+)
+
 fun ResultRow.toClass() = Class(
     id=this[Classes.id],
     name = this[Classes.name],
@@ -95,17 +102,13 @@ fun Schools.insertSchool(school: School){
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
+fun TeachersSchool.joinTeacher(school: String, teacher: String){
+    this.insert {
+        it[teacherId] = teacher
+        it[schoolId] = school
+        it[dateJoined]= Date().time
+    }
+}
 
 
 fun String.toRole(): Role?=

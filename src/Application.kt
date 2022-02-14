@@ -51,6 +51,7 @@ fun Application.module(testing: Boolean = false) {
             Classes,
             Duties,
             MemberClass,
+            TeachersSchool
             )
     }
 
@@ -100,6 +101,7 @@ fun Routing.teacher() {
     loginTeacher()
     authenticate("auth-teacher") {
         getTeacherClasses()
+        joinToSchool()
     }
 }
 
@@ -126,6 +128,7 @@ fun Routing.manger() {
         getMangerSchools()
         getMangerClasses()
         removeManger()
+        getTeachers()
     }
 }
 

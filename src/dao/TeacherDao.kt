@@ -59,7 +59,6 @@ class TeacherDao {
     fun getClasses(id: String): List<ClassDto> =
         transaction {
             (Teachers innerJoin Classes)
-                .slice(Classes.id)
                 .select { (Classes.teacherId.eq(id)) }
                 .map{
                     ClassDto(

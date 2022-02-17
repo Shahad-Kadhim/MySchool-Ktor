@@ -1,6 +1,7 @@
 package com.example.util
 
 import com.example.authentication.Role
+import com.example.dao.toRole
 import com.example.database.entities.*
 import com.example.models.*
 import org.jetbrains.exposed.sql.ResultRow
@@ -102,6 +103,24 @@ fun TeachersSchool.joinTeacher(school: String, teacher: String){
     }
 }
 
+
+fun Users.insertUser(user: User){
+    this.insert {
+        it[id] = user.id
+        it[name] = user.name
+        it[password] = user.password
+        it[phone] = user.phone
+        it[role] = user.role.name
+    }
+}
+fun ResultRow.toUser()=
+    User(
+        this[Users.id],
+        this[Users.name],
+        this[Users.password],
+        this[Users.phone],
+        this[Users.role].toRole(),
+    )
 
 fun String.toRole(): Role?=
     when(this.lowercase()){

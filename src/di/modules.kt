@@ -8,7 +8,8 @@ import org.koin.dsl.module
 val appModule = module(createdAtStart = true) {
 
     single { StudentRepository(get()) }
-    single { MangerRepository(get()) }
+    single { UserRepository(get()) }
+    single { MangerRepository(get(),get()) }
     single { ClassRepository(get()) }
     single { TeacherRepository(get())}
     single { SchoolRepository(get()) }
@@ -16,5 +17,6 @@ val appModule = module(createdAtStart = true) {
     single { StudentDao() }
     single { TeacherDao() }
     single { ClassDao() }
-    single { MangerDao() }
+    single { UserDao() }
+    single { MangerDao(get()) }
 }

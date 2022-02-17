@@ -8,7 +8,9 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
 
-class MangerDao {
+class MangerDao(
+    private val teacherDao: TeacherDao
+) {
 
     fun getAllMangers(): List<Manger> =
         transaction {
@@ -29,7 +31,7 @@ class MangerDao {
                     School(it[Schools.id],it[Schools.name],id)
                 }
         }
-//TODO Uncomment Later
+
     fun getClasses(id: String): List<ClassDto> =
         transaction {
             (Schools innerJoin Classes)
@@ -39,11 +41,9 @@ class MangerDao {
                     ClassDto(
                         it[Classes.id],
                         it[Classes.name],
-                        ""
-//                        Teachers.select(Teachers.id.eq(it[Classes.teacherId])).map {it[Teachers.name]}.firstOrNull() ?: ""
+                        teacherDao.getTeacherById(it[Classes.teacherId])?.name ?: "",
+                        it[Classes.stage]
                     )
                 }
         }
-
-
 }

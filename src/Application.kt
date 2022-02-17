@@ -1,7 +1,6 @@
 package com.example
 
 import com.example.authentication.JwtConfig
-import com.example.authentication.Role
 import com.example.database.DatabaseManager
 import com.example.database.entities.*
 import com.example.di.appModule
@@ -15,7 +14,6 @@ import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.koin.ktor.ext.Koin
 
@@ -28,7 +26,7 @@ fun main(args: Array<String>) {
 }
 
 
-val secret =System.getenv("KTOR_JWT_SECRET")?: "default_value"
+private val secret =System.getenv("KTOR_JWT_SECRET")?: "default_value"
 val jwtConfig = JwtConfig(secret)
 
 @Suppress("unused") // Referenced in application.conf
@@ -79,6 +77,8 @@ fun Application.module(testing: Boolean = false) {
         classes()
         addUser()
         loginUser()
+        addRole()
+        getRoles()
         testRoute()
     }
 }
@@ -122,6 +122,7 @@ fun Routing.manger() {
     authenticate("auth-manger") {
         getMangerSchools()
         getTeachers()
+        getMangerClasses()
     }
 }
 

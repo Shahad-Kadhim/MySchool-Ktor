@@ -54,7 +54,12 @@ fun Route.createSchool() {
                 )
                 try {
                     schoolRepository.addSchool(school)
-                    call.respond(HttpStatusCode.Created.value)
+                    call.respond(
+                        BaseResponse(
+                            HttpStatusCode.Created.value,
+                            school
+                        )
+                    )
                 } catch (e: Exception) {
                     call.respond(HttpStatusCode.BadRequest)
                 }
@@ -89,7 +94,11 @@ fun Route.joinToSchool() {
                             schoolId,
                             jwt.payload.getClaim(JwtConfig.CLAIM_ID).asString().toString()
                         )
-                        call.respond(HttpStatusCode.OK.value)
+                        call.respond(
+                            BaseResponse(
+                                HttpStatusCode.OK.value,
+                                "TEACHER JOIN SUCCESS")
+                        )
                     }catch (e:Exception){
                         call.respond(HttpStatusCode.BadRequest)
                     }
@@ -104,7 +113,12 @@ fun Route.getTeachers(){
         val schoolName = call.request.queryParameters["school_name"]
             schoolName?.let {
                 schoolRepository.getSchoolByName(it)?.let { schoolId ->
-                    call.respond(BaseResponse(HttpStatusCode.OK.value,schoolRepository.getTeachers(schoolId)))
+                    call.respond(
+                        BaseResponse(
+                            HttpStatusCode.OK.value,
+                            schoolRepository.getTeachers(schoolId)
+                        )
+                    )
                 }
         }
     }

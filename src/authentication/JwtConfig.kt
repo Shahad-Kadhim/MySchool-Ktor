@@ -2,7 +2,6 @@ package com.example.authentication
 
 import com.auth0.jwt.*
 import com.auth0.jwt.algorithms.Algorithm
-import com.example.secret
 import com.example.util.toRole
 import io.ktor.auth.*
 import io.ktor.auth.jwt.*

@@ -1,12 +1,13 @@
 package com.example.repostiory
 
 import com.example.dao.MangerDao
-import com.example.dao.User
+import com.example.dao.UserDao
 import com.example.models.Manger
-import com.example.route.userDao
+import com.example.models.User
 
 class MangerRepository(
-    private val mangerDao: MangerDao
+    private val mangerDao: MangerDao,
+    private val userDao: UserDao
 ) {
 
     fun getMangerByNameAndPassword(name: String, password: String): User? =

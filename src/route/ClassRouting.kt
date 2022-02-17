@@ -1,6 +1,7 @@
 package com.example.route
 
 import com.example.authentication.JwtConfig
+import com.example.models.BaseResponse
 import com.example.models.Class
 import com.example.repostiory.ClassRepository
 import com.example.repostiory.SchoolRepository
@@ -27,8 +28,13 @@ fun Route.getAllClasses(){
 fun Route.getClassById(){
     get("/class/{classId}") {
         call.parameters["classId"]?.let { classId ->
-            classRepository.getClassById(classId)?.let {
-                call.respond(it)
+            classRepository.getClassById(classId)?.let { classInfo ->
+                call.respond(
+                    BaseResponse(
+                        HttpStatusCode.Found.value,
+                        classInfo
+                    )
+                )
             } ?: call.respond(HttpStatusCode.NotFound, "this Id : $classId not found")
         }
     }
@@ -41,16 +47,21 @@ fun Route.createClass() {
             try {
                 val newClass = call.receive<CreateClassBody>()
                 schoolRepository.getSchoolTeacherByNameSchool(newClass.schoolName,teacherId)?.let { schoolId ->
-                    classRepository.addClass(
-                        Class(
-                            id =  UUID.randomUUID().toString(),
-                            name = newClass.name,
-                            teacherId = teacherId,
-                            schoolId = schoolId,
-                            stage = newClass.stage
+                    Class(
+                        id =  UUID.randomUUID().toString(),
+                        name = newClass.name,
+                        teacherId = teacherId,
+                        schoolId = schoolId,
+                        stage = newClass.stage
+                    ).also { classInfo->
+                        classRepository.addClass(classInfo)
+                        call.respond(
+                            BaseResponse(
+                                HttpStatusCode.Created.value,
+                                classInfo
+                            )
                         )
-                    )
-                    call.respond(HttpStatusCode.Created.value)
+                    }
                 }
 
             }catch (e:Exception){
@@ -64,7 +75,12 @@ fun Route.createClass() {
 fun Route.getClassMembers(){
     get("class/{classId}/members") {
         call.parameters["classId"]?.let {
-            call.respond(classRepository.getMembers(it))
+            call.respond(
+                BaseResponse(
+                    HttpStatusCode.OK.value,
+                    classRepository.getMembers(it)
+                )
+            )
         }
     }
 }

@@ -3,10 +3,10 @@ package com.example.route
 import com.example.authentication.JwtConfig
 import com.example.authentication.Role
 import com.example.authentication.hash
-import com.example.dao.UserDao
 import com.example.dao.toRole
 import com.example.jwtConfig
 import com.example.models.*
+import com.example.repostiory.UserRepository
 import com.example.requestBody.LoginBody
 import com.example.requestBody.MangerRegisterBody
 import com.example.requestBody.StudentRegisterBody
@@ -16,9 +16,10 @@ import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import org.koin.java.KoinJavaComponent
 import java.util.*
 
-val userDao =UserDao()
+private val userRepository: UserRepository by KoinJavaComponent.inject(UserRepository::class.java)
 
 fun Route.addUser(){
     post("/user/create") {
@@ -38,8 +39,16 @@ fun Route.addUser(){
                         )
                     }
 
-                    userDao.addUserStudent(student)
-                    call.respond(BaseResponse(HttpStatusCode.Created.value, jwtConfig.generateToken(JwtConfig.JwtUser(student.id,Role.STUDENT))))
+                    userRepository.addStudentUser(student)
+                    call.respond(
+                        BaseResponse(
+                            HttpStatusCode.Created.value,
+                            AuthenticationResponse(
+                                role.toRole(),
+                                jwtConfig.generateToken(JwtConfig.JwtUser(student.id,Role.STUDENT))
+                            )
+                        )
+                    )
 
                 }
                 Role.TEACHER.name -> {
@@ -53,8 +62,16 @@ fun Route.addUser(){
                         )
                     }
 
-                    userDao.addUserTeacher(teacher)
-                    call.respond(BaseResponse(HttpStatusCode.Created.value, jwtConfig.generateToken(JwtConfig.JwtUser(teacher.id,Role.TEACHER))))
+                    userRepository.addTeacherUser(teacher)
+                    call.respond(
+                        BaseResponse(
+                            HttpStatusCode.Created.value,
+                            AuthenticationResponse(
+                                role.toRole(),
+                                jwtConfig.generateToken(JwtConfig.JwtUser(teacher.id,Role.TEACHER))
+                            )
+                        )
+                    )
 
                 }
                 Role.MANGER.name -> {
@@ -67,11 +84,11 @@ fun Route.addUser(){
                         )
                     }
                     println(manger.toString())
-                    userDao.addUserManger(manger)
+                    userRepository.addMangerUser(manger)
                     call.respond(
                         BaseResponse(
                             HttpStatusCode.Created.value,
-                            TokenResponse(
+                            AuthenticationResponse(
                                 role.toRole(),
                                 jwtConfig.generateToken(JwtConfig.JwtUser(manger.id,Role.MANGER)
                                 )
@@ -92,11 +109,11 @@ fun Route.loginUser(){
     post("/user/login") {
         try {
             val user = call.receive<LoginBody>()
-            userDao.findUserByNameAndPassword(user.name, hash(user.password))?.let {
+            userRepository.loginUser(user.name, hash(user.password))?.let {
                call.respond(
                    BaseResponse(
                        HttpStatusCode.Found.value,
-                       TokenResponse(
+                       AuthenticationResponse(
                            it.role,
                            jwtConfig.generateToken(JwtConfig.JwtUser(it.id,it.role))
                        )
@@ -106,5 +123,34 @@ fun Route.loginUser(){
         }catch (e: Exception){
             call.respond(HttpStatusCode.BadRequest)
         }
+    }
+}
+
+fun Route.addRole(){
+    post("/role/add") {
+        call.request.queryParameters["role"]?.let { role ->
+            try{
+                userRepository.addRole(role)
+                call.respond(
+                    BaseResponse(
+                        HttpStatusCode.Created.value,
+                        role
+                    )
+                )
+            }catch (e:Exception){
+                call.respond(HttpStatusCode.BadRequest)
+            }
+        }
+    }
+}
+
+fun Route.getRoles(){
+    get("/roles") {
+        call.respond(
+            BaseResponse(
+                HttpStatusCode.OK.value,
+                userRepository.getRoles()
+            )
+        )
     }
 }

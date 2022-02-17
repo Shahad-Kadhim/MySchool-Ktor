@@ -1,5 +1,6 @@
 package com.example.dao
 
+import com.example.authentication.Role
 import com.example.database.entities.*
 import com.example.models.*
 import com.example.util.*
@@ -11,44 +12,13 @@ class MangerDao {
 
     fun getAllMangers(): List<Manger> =
         transaction {
-            Mangers.selectAll().map {
-                it.toManger()
-            }
-        }
-
-    fun createManger(manger: Manger) =
-        transaction {
-            Mangers.insertManger(manger)
-        }
-    fun getMangerById(id: String): Manger? =
-        transaction {
-            Mangers.select(Mangers.id.eq(id)).firstOrNull()?.toManger()
-        }
-
-    fun getMangerByNameAndPassword(name:String,password: String) : Manger? =
-        transaction {
-            Mangers
-                .select{
-                    Mangers.name.eq(name) and Mangers.password.eq(password)
+            (Mangers innerJoin Users)
+                .select(Users.role.eq(Role.MANGER.name))
+                .map {
+                    it.toManger()
                 }
-                .firstOrNull()
-                ?.toManger()
         }
 
-
-    fun removeManger(id: String): Boolean =
-        transaction {
-            Mangers.deleteWhere { Mangers.id.eq(id) } == 1
-        }
-
-
-    fun updateManger(Manger: Manger) =
-        transaction {
-            Mangers.update({ Mangers.id eq Manger.id }){
-                it[name] = Manger.name
-                it[password]= Manger.password
-            }
-        }
 
 
     fun getSchools(id: String): List<School> =
@@ -59,7 +29,7 @@ class MangerDao {
                     School(it[Schools.id],it[Schools.name],id)
                 }
         }
-
+//TODO Uncomment Later
     fun getClasses(id: String): List<ClassDto> =
         transaction {
             (Schools innerJoin Classes)
@@ -69,7 +39,8 @@ class MangerDao {
                     ClassDto(
                         it[Classes.id],
                         it[Classes.name],
-                        Teachers.select(Teachers.id.eq(it[Classes.teacherId])).map {it[Teachers.name]}.firstOrNull() ?: ""
+                        ""
+//                        Teachers.select(Teachers.id.eq(it[Classes.teacherId])).map {it[Teachers.name]}.firstOrNull() ?: ""
                     )
                 }
         }

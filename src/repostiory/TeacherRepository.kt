@@ -19,8 +19,8 @@ class TeacherRepository(
     fun deleteTeacher(id: String) =
         teacherDao.removeTeacher(id)
 
-    fun getTeacherByNameAndPassword(name: String, password: String): Teacher? =
-        teacherDao.getTeacherByNameAndPassword(name,password)
+//    fun getTeacherByNameAndPassword(name: String, password: String): Teacher? =
+//        teacherDao.getTeacherByNameAndPassword(name,password)
 
 
     fun getTeacherClasses(id: String)=

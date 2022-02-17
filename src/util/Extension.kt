@@ -3,34 +3,33 @@ package com.example.util
 import com.example.authentication.Role
 import com.example.database.entities.*
 import com.example.models.*
-import com.mysql.cj.xdevapi.UpdateStatement
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
 import java.util.*
 
 fun ResultRow.toStudent() = Student(
     id=this[Students.id],
-    name = this[Students.name],
-    password = this[Students.password],
+    name = this[Users.name],
+    password = this[Users.password],
     age = this[Students.age],
     note = this[Students.note],
-    phone = this[Students.phone],
+    phone = this[Users.phone],
     stage = this[Students.stage]
 )
 
 fun ResultRow.toTeacher() = Teacher(
     id=this[Teachers.id],
-    name = this[Teachers.name],
-    password = this[Teachers.password],
+    name = this[Users.name],
+    password = this[Users.password],
     teachingSpecialization = this[Teachers.teachingSpecialization],
-    phone = this[Teachers.phone],
+    phone = this[Users.phone],
 )
 
 fun ResultRow.toTeacherList() = TeacherList(
     id=this[Teachers.id],
-    name = this[Teachers.name],
+    name = "this[Users.name]",
     teachingSpecialization = this[Teachers.teachingSpecialization],
-    phone = this[Teachers.phone],
+    phone =    3335454 //this[Users.phone],
 )
 
 fun ResultRow.toClass() = Class(
@@ -43,8 +42,9 @@ fun ResultRow.toClass() = Class(
 
 fun ResultRow.toManger() = Manger(
     id=this[Mangers.id],
-    name = this[Mangers.name],
-    password = this[Mangers.password]
+    name = this[Users.name],
+    password = this[Users.password],
+    phone = this[Users.phone]
 )
 
 fun ResultRow.toSchool() = School(
@@ -66,9 +66,6 @@ fun Classes.insertClass(nClass:Class){
 fun Students.insertStudent(student: Student){
     this.insert {
         it[id] = student.id
-        it[name] = student.name
-        it[password]= student.password
-        it[phone]= student.phone
         it[age]= student.age
         it[note]= student.note
         it[stage]=student.stage
@@ -79,9 +76,6 @@ fun Students.insertStudent(student: Student){
 fun Teachers.insertTeacher(teacher: Teacher){
     this.insert {
         it[id] = teacher.id
-        it[name] = teacher.name
-        it[password]= teacher.password
-        it[phone]= teacher.phone
         it[teachingSpecialization] = teacher.teachingSpecialization
     }
 }
@@ -89,8 +83,6 @@ fun Teachers.insertTeacher(teacher: Teacher){
 fun Mangers.insertManger(manger: Manger){
     this.insert {
         it[id] = manger.id
-        it[name] = manger.name
-        it[password]= manger.password
     }
 }
 

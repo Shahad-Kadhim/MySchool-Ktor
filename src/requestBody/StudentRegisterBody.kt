@@ -5,6 +5,6 @@ data class StudentRegisterBody(
     val password: String,
     var age: Int,
     var note: String,
-    var phone: Int ,
+    var phone: Long ,
     var stage: Int
 )

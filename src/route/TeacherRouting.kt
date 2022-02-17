@@ -26,45 +26,6 @@ fun Route.getAllTeacher(){
     }
 }
 
-fun Route.registerTeacher(){
-    post("/teacher/new"){
-        try {
-            val newUser = call.receive<TeacherRegisterBody>()
-
-            val teacher = Teacher(
-                id =  UUID.randomUUID().toString(),
-                name = newUser.name,
-                password= newUser.password,
-                teachingSpecialization = newUser.teachingSpecialization,
-                phone = newUser.phone,
-            )
-            println("TEACHEREGISTER  ::::: ${teacher.id}  :::::: ")
-            teacherRepository.addTeacher(teacher)
-            call.respond(jwtConfig.generateToken(JwtConfig.JwtUser( teacher.id,Role.TEACHER)))
-
-        }catch (e:Exception){
-            println(e.message)
-            call.respond(HttpStatusCode.BadRequest)
-        }
-    }
-}
-
-fun Route.loginTeacher(){
-    post("/teacher/login") {
-        val loginBody = call.receive<LoginBody>()
-
-        val user = teacherRepository.getTeacherByNameAndPassword(loginBody.name, loginBody.password)
-
-        if (user == null) {
-            call.respond(HttpStatusCode.Unauthorized, "Invalid credentials!")
-            return@post
-        }
-
-        val token = jwtConfig.generateToken(JwtConfig.JwtUser(user.id, Role.TEACHER))
-        call.respond(token)
-    }
-}
-
 fun Route.getTeacherClasses(){
     get("/teacher/classes") {
 

@@ -12,4 +12,5 @@ object Classes: Table("class") {
     val schoolId = (varchar("schoolId",50) references  Schools.id)
     val stage = integer("stage")
 
+
 }

@@ -1,11 +1,11 @@
 package com.example.dao
 
-import com.example.database.entities.Classes
-import com.example.database.entities.Teachers
-import com.example.database.entities.TeachersSchool
+import com.example.authentication.Role
+import com.example.database.entities.*
 import com.example.models.ClassDto
 import com.example.models.Teacher
 import com.example.util.insertTeacher
+import com.example.util.toStudent
 import com.example.util.toTeacher
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -15,9 +15,11 @@ class TeacherDao {
 
     fun getAllTeachers(): List<Teacher> =
         transaction {
-            Teachers.selectAll().map {
-                it.toTeacher()
-            }
+            (Teachers innerJoin Users)
+                .select(Users.role.eq(Role.TEACHER.name))
+                .map {
+                    it.toTeacher()
+                }
         }
 
     fun createTeacher(teacher: Teacher) =
@@ -29,15 +31,15 @@ class TeacherDao {
             Teachers.select(Teachers.id.eq(id)).firstOrNull()?.toTeacher()
         }
 
-    fun getTeacherByNameAndPassword(name:String,password: String) : Teacher? =
-        transaction {
-            Teachers
-                .select{
-                    Teachers.name.eq(name) and Teachers.password.eq(password)
-                }
-                .firstOrNull()
-                ?.toTeacher()
-        }
+//    fun getTeacherByNameAndPassword(name:String,password: String) : Teacher? =
+//        transaction {
+//            Teachers
+//                .select{
+//                    Teachers.name.eq(name) and Teachers.password.eq(password)
+//                }
+//                .firstOrNull()
+//                ?.toTeacher()
+//        }
 
 
     fun removeTeacher(id: String): Boolean =
@@ -46,15 +48,15 @@ class TeacherDao {
         }
 
 
-    fun updateTeacher(teacher: Teacher) =
-        transaction {
-            Teachers.update({ Teachers.id eq teacher.id }){
-                it[name] = teacher.name
-                it[password]= teacher.password
-                it[phone]= teacher.phone
-                it[teachingSpecialization] = teacher.teachingSpecialization
-            }
-        }
+//    fun updateTeacher(teacher: Teacher) =
+//        transaction {
+//            Teachers.update({ Teachers.id eq teacher.id }){
+//                it[name] = teacher.name
+//                it[password]= teacher.password
+//                it[phone]= teacher.phone
+//                it[teachingSpecialization] = teacher.teachingSpecialization
+//            }
+//        }
 
 
     fun getClasses(id: String): List<ClassDto> =

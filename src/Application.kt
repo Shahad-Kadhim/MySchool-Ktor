@@ -1,24 +1,21 @@
 package com.example
 
-import com.auth0.jwt.JWT
-import com.auth0.jwt.algorithms.Algorithm
 import com.example.authentication.JwtConfig
 import com.example.authentication.Role
 import com.example.database.DatabaseManager
 import com.example.database.entities.*
 import com.example.di.appModule
 import com.example.route.*
-import com.example.util.toRole
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.auth.jwt.*
 import io.ktor.features.*
 import io.ktor.gson.*
-import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.koin.ktor.ext.Koin
 
@@ -42,6 +39,8 @@ fun Application.module(testing: Boolean = false) {
     DatabaseManager().getDatabase()
     transaction {
         SchemaUtils.create(
+            Roles,
+            Users,
            Mangers,
             Schools,
             Teachers ,
@@ -77,8 +76,9 @@ fun Application.module(testing: Boolean = false) {
         manger()
         school()
         teacher()
-        student()
         classes()
+        addUser()
+        loginUser()
         testRoute()
     }
 }
@@ -93,13 +93,9 @@ fun Routing.testRoute() {
 }
 
 fun Routing.student() {
-    registerStudent()
-    loginStudent()
 }
 
 fun Routing.teacher() {
-    registerTeacher()
-    loginTeacher()
     authenticate("auth-teacher") {
         getTeacherClasses()
         joinToSchool()
@@ -123,12 +119,8 @@ fun Routing.classes() {
 }
 
 fun Routing.manger() {
-    registerManger()
-    loginManger()
     authenticate("auth-manger") {
         getMangerSchools()
-        getMangerClasses()
-        removeManger()
         getTeachers()
     }
 }

@@ -3,14 +3,11 @@ package com.example.database.entities
 import org.jetbrains.exposed.sql.Table
 
 
-object Students: Table("student") {
+object Students: Table("students") {
 
-    val id = varchar("id",50).primaryKey()
-    val name = varchar("name",30).uniqueIndex()
-    val password = varchar("password",30)
+    val id = varchar("id",50).primaryKey() references Users.id
     val age = integer("age")
     val note = text("note")
-    val phone = integer("phone")
     val stage = integer("stage")
 
 }

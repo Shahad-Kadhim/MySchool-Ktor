@@ -4,10 +4,8 @@ package com.example.database.entities
 import org.jetbrains.exposed.sql.Table
 
 
-object Mangers : Table("manger") {
+object Mangers : Table("mangers") {
 
-    val id = varchar("id",50).primaryKey()
-    val name = varchar("name",30).uniqueIndex()
-    val password = varchar("password",30)
+    val id = varchar("id",50).primaryKey() references Users.id
 
 }

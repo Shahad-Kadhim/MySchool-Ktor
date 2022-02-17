@@ -15,14 +15,4 @@ class StudentRepository(
         studentDao.getStudentClasses(studentId)
 
 
-    fun addStudent(student: Student) =
-        studentDao.createStudent(student)
-
-    fun deleteStudent(studentId: String) =
-        studentDao.removeStudent(studentId)
-
-    fun getUserByNameAndPassword(name: String, password: String): Student? =
-       studentDao.getStudentByNameAndPassword(name,password)
-
-
 }

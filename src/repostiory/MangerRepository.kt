@@ -1,24 +1,16 @@
 package com.example.repostiory
 
 import com.example.dao.MangerDao
+import com.example.dao.User
 import com.example.models.Manger
+import com.example.route.userDao
 
 class MangerRepository(
     private val mangerDao: MangerDao
 ) {
 
-    fun addManger(manger: Manger){
-        mangerDao.createManger(manger)
-    }
-
-    fun getMangerById(id: String)=
-        mangerDao.getMangerById(id)
-
-    fun deleteManger(id: String) =
-        mangerDao.removeManger(id)
-
-    fun getMangerByNameAndPassword(name: String, password: String): Manger? =
-        mangerDao.getMangerByNameAndPassword(name,password)
+    fun getMangerByNameAndPassword(name: String, password: String): User? =
+        userDao.findUserByNameAndPassword(name,password)
 
 
     fun getMangerSchools(id: String)=

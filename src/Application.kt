@@ -99,6 +99,7 @@ fun Routing.teacher() {
     authenticate("auth-teacher") {
         getTeacherClasses()
         joinToSchool()
+        getTeacherSchools()
     }
 }
 

@@ -28,12 +28,26 @@ fun Route.getAllTeacher(){
 
 fun Route.getTeacherClasses(){
     get("/teacher/classes") {
-
         call.principal<JWTPrincipal>()?.let {
             call.respond(
                 BaseResponse(
                     HttpStatusCode.OK.value,
                     teacherRepository.getTeacherClasses(
+                        it.payload.getClaim(JwtConfig.CLAIM_ID).asString()
+                    ),
+                )
+            )
+        }
+    }
+}
+
+fun Route.getTeacherSchools(){
+    get("/teacher/schools") {
+        call.principal<JWTPrincipal>()?.let {
+            call.respond(
+                BaseResponse(
+                    HttpStatusCode.OK.value,
+                    teacherRepository.getTeacherSchools(
                         it.payload.getClaim(JwtConfig.CLAIM_ID).asString()
                     ),
                 )

@@ -16,5 +16,6 @@ class TeacherRepository(
     fun getAllTeacher(): List<Teacher> =
         teacherDao.getAllTeachers()
 
-
+    fun getTeacherSchools(teacherId: String) =
+        teacherDao.getSchools(teacherId)
 }

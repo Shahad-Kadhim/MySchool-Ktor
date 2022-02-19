@@ -15,8 +15,8 @@ val appModule = module(createdAtStart = true) {
     single { SchoolRepository(get()) }
     single { SchoolDao() }
     single { StudentDao() }
-    single { TeacherDao() }
+    single { TeacherDao(get()) }
     single { ClassDao() }
     single { UserDao() }
-    single { MangerDao(get()) }
+    single { MangerDao(get(),get()) }
 }

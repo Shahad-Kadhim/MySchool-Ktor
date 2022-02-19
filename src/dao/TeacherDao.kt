@@ -3,18 +3,17 @@ package com.example.dao
 import com.example.authentication.Role
 import com.example.database.entities.*
 import com.example.models.ClassDto
-import com.example.models.School
+import com.example.models.SchoolDto
 import com.example.models.Teacher
-import com.example.util.insertTeacher
-import com.example.util.toSchool
-import com.example.util.toStudent
 import com.example.util.toTeacher
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
 import org.jetbrains.exposed.sql.transactions.transaction
 
-class TeacherDao {
+class TeacherDao(
+    private val userDao: UserDao
+) {
 
     fun getAllTeachers(): List<Teacher> =
         transaction {
@@ -46,10 +45,14 @@ class TeacherDao {
                 }
         }
 
-    fun getSchools(id: String): List<School> =
+    fun getSchools(id: String): List<SchoolDto> =
         transaction {
             Schools.select(Schools.id.inList(getIdOfTeachersSchool(id))).map {
-                it.toSchool()
+                SchoolDto(
+                    id=it[Schools.id],
+                    name = it[Schools.name],
+                    mangerName = userDao.findUserById(it[Schools.mangerId])?.name ?: "UNKNOWN"
+                )
             }
         }
 

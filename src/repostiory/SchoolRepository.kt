@@ -1,9 +1,8 @@
 package com.example.repostiory
 
-import com.example.dao.ClassDao
 import com.example.dao.SchoolDao
-import com.example.models.Class
 import com.example.models.School
+import com.example.models.SchoolDto
 
 class SchoolRepository(
     private val  schoolDao: SchoolDao

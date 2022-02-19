@@ -1,10 +1,10 @@
 package com.example.route
 
-import com.auth0.jwt.JWT
 import com.example.authentication.JwtConfig
 import com.example.database.entities.TeachersSchool
 import com.example.models.BaseResponse
 import com.example.models.School
+import com.example.models.SchoolDto
 import com.example.models.TeacherSchool
 import com.example.repostiory.SchoolRepository
 import io.ktor.application.*

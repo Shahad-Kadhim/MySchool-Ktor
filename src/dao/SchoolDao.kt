@@ -2,7 +2,7 @@ package com.example.dao
 
 import com.example.database.entities.*
 import com.example.models.School
-import com.example.models.Teacher
+import com.example.models.SchoolDto
 import com.example.models.TeacherList
 import com.example.util.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq

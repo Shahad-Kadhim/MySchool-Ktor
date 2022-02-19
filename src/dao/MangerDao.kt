@@ -9,7 +9,8 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class MangerDao(
-    private val teacherDao: TeacherDao
+    private val teacherDao: TeacherDao,
+    private val userDao: UserDao
 ) {
 
     fun getAllMangers(): List<Manger> =
@@ -23,12 +24,16 @@ class MangerDao(
 
 
 
-    fun getSchools(id: String): List<School> =
+    fun getSchools(id: String): List<SchoolDto> =
         transaction {
             (Mangers innerJoin Schools)
                 .select { (Schools.mangerId.eq(id)) }
                 .map{
-                    School(it[Schools.id],it[Schools.name],id)
+                    SchoolDto(
+                        it[Schools.id],
+                        it[Schools.name],
+                        userDao.findUserById(id)?.name ?: "UNKNOWN"
+                    )
                 }
         }
 

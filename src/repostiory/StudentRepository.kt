@@ -2,12 +2,13 @@ package com.example.repostiory
 
 import com.example.dao.StudentDao
 import com.example.models.Student
+import com.example.models.StudentDto
 
 class StudentRepository(
     private val studentDao: StudentDao
 ) {
 
-    fun getAllStudent(): List<Student> =
+    fun getAllStudent(): List<StudentDto> =
         studentDao.getAllStudents()
 
 

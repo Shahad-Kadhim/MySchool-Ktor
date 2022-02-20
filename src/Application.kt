@@ -36,6 +36,19 @@ fun Application.module(testing: Boolean = false) {
 
     DatabaseManager().getDatabase()
     transaction {
+        SchemaUtils.drop(
+//            TeachersSchool,
+//            MemberClass,
+//            Duties,
+//            Classes,
+//            Students,
+//            Comments,
+//            Posts,
+//            Teachers ,
+//            Schools,
+//            Mangers,
+//            Users,
+        )
         SchemaUtils.create(
             Roles,
             Users,
@@ -48,7 +61,8 @@ fun Application.module(testing: Boolean = false) {
             Classes,
             Duties,
             MemberClass,
-            TeachersSchool
+            TeachersSchool,
+            StudentsSchool
             )
     }
 
@@ -74,6 +88,7 @@ fun Application.module(testing: Boolean = false) {
         manger()
         school()
         teacher()
+        student()
         classes()
         addUser()
         loginUser()
@@ -93,6 +108,9 @@ fun Routing.testRoute() {
 }
 
 fun Routing.student() {
+    authenticate("auth-student") {
+        joinStudentToSchool()
+    }
 }
 
 fun Routing.teacher() {
@@ -123,6 +141,7 @@ fun Routing.manger() {
     authenticate("auth-manger") {
         getMangerSchools()
         getTeachers()
+        getStudent()
         getMangerClasses()
     }
 }

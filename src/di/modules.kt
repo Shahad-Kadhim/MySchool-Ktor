@@ -13,7 +13,7 @@ val appModule = module(createdAtStart = true) {
     single { ClassRepository(get()) }
     single { TeacherRepository(get())}
     single { SchoolRepository(get()) }
-    single { SchoolDao() }
+    single { SchoolDao(get(),get()) }
     single { StudentDao() }
     single { TeacherDao(get()) }
     single { ClassDao() }

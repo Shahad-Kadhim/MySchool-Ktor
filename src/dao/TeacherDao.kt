@@ -5,7 +5,9 @@ import com.example.database.entities.*
 import com.example.models.ClassDto
 import com.example.models.SchoolDto
 import com.example.models.Teacher
+import com.example.models.TeacherList
 import com.example.util.toTeacher
+import com.example.util.toTeacherList
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
@@ -15,15 +17,23 @@ class TeacherDao(
     private val userDao: UserDao
 ) {
 
-    fun getAllTeachers(): List<Teacher> =
+    fun getAllTeachers(): List<TeacherList> =
         transaction {
             (Teachers innerJoin Users)
                 .select(Users.role.eq(Role.TEACHER.name))
                 .map {
-                    it.toTeacher()
+                    it.toTeacherList()
                 }
         }
 
+    fun getAllTeachers(teachersId: List<String>): List<TeacherList> =
+        transaction {
+            (Teachers innerJoin Users)
+                .select(Users.role.eq(Role.TEACHER.name) and Users.id.inList(teachersId))
+                .map {
+                    it.toTeacherList()
+                }
+        }
 
     fun getTeacherById(id: String): Teacher? =
         transaction {

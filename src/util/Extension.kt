@@ -8,10 +8,9 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
 import java.util.*
 
-fun ResultRow.toStudent() = Student(
+fun ResultRow.toStudent() = StudentDto(
     id=this[Students.id],
     name = this[Users.name],
-    password = this[Users.password],
     age = this[Students.age],
     note = this[Students.note],
     phone = this[Users.phone],
@@ -28,9 +27,9 @@ fun ResultRow.toTeacher() = Teacher(
 
 fun ResultRow.toTeacherList() = TeacherList(
     id=this[Teachers.id],
-    name = "this[Users.name]",
+    name = this[Users.name],
     teachingSpecialization = this[Teachers.teachingSpecialization],
-    phone =    3335454 //this[Users.phone],
+    phone =  this[Users.phone],
 )
 
 fun ResultRow.toClass() = Class(
@@ -99,6 +98,14 @@ fun TeachersSchool.joinTeacher(school: String, teacher: String){
     this.insert {
         it[teacherId] = teacher
         it[schoolId] = school
+        it[dateJoined]= Date().time
+    }
+}
+
+fun StudentsSchool.joinStudent(schoolId: String, student: StudentDto){
+    this.insert {
+        it[studentId] = student.id
+        it[this.schoolId] = schoolId
         it[dateJoined]= Date().time
     }
 }

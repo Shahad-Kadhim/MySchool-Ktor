@@ -2,16 +2,18 @@ package com.example.dao
 
 import com.example.database.entities.*
 import com.example.models.School
-import com.example.models.SchoolDto
+import com.example.models.StudentDto
 import com.example.models.TeacherList
 import com.example.util.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
-class SchoolDao {
+class SchoolDao(
+    private val studentDao: StudentDao,
+    private val teacherDao: TeacherDao
+) {
 
     fun getAllSchools(): List<School> =
         transaction {
@@ -69,15 +71,35 @@ class SchoolDao {
 
     fun getTeachers(schoolId: String): List<TeacherList> =
         transaction {
-            Teachers.select(Teachers.id.inList(
-                TeachersSchool
-                    .select(TeachersSchool.schoolId.eq(schoolId))
-                    .map { it[TeachersSchool.teacherId] }
-            )).map {
-                it.toTeacherList()
+            teacherDao.getAllTeachers(
+                getTeachersInSchool(schoolId)
+            )
+        }
+
+    private fun getTeachersInSchool(schoolId: String): List<String> =
+        transaction{
+            TeachersSchool
+                .select(TeachersSchool.schoolId.eq(schoolId))
+                .map { it[TeachersSchool.teacherId] }
+        }
+
+    fun addStudent(schoolId: String,studentId: String) =
+        transaction{
+            studentDao.getStudentById(studentId)?.let { student ->
+                StudentsSchool.joinStudent(schoolId, student)
             }
         }
 
+    fun getStudents(schoolId: String): List<StudentDto> =
+        transaction {
+            studentDao.getAllStudents(getStudentInSchool(schoolId))
+        }
 
+    private fun getStudentInSchool(schoolId: String): List<String> =
+        transaction{
+            StudentsSchool
+                .select(StudentsSchool.schoolId.eq(schoolId))
+                .map { it[StudentsSchool.studentId] }
+        }
 
 }

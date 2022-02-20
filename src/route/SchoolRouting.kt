@@ -81,10 +81,8 @@ fun Route.getSchoolClasses(){
     }
 }
 
-
-
 fun Route.joinToSchool() {
-    post("/teacher/joinTeacher") {
+    post("/teacher/joinSchool") {
         val schoolName = call.request.queryParameters["school_name"]
         call.principal<JWTPrincipal>()?.let { jwt ->
             schoolName?.let {
@@ -123,6 +121,52 @@ fun Route.getTeachers(){
         }
     }
 }
+
+fun Route.joinStudentToSchool() {
+    post("/student/joinSchool") {
+        println("GGGGGGGGGGGGGGGGGGGGGGGGG")
+        val schoolName = call.request.queryParameters["school_name"]
+        call.principal<JWTPrincipal>()?.let { jwt ->
+            println("GGGGGGGGGGGGGGGGGGGGGGGGG")
+            schoolName?.let {
+                schoolRepository.getSchoolByName(it)?.let { schoolId ->
+                    try {
+                        println("GGGGGGGGGGGGGGGGGGGGGGGGG")
+                        schoolRepository.addStudent(
+                            schoolId,
+                            jwt.payload.getClaim(JwtConfig.CLAIM_ID).asString().toString()
+                        )
+                        call.respond(
+                            BaseResponse(
+                                HttpStatusCode.OK.value,
+                                "STUDENT JOIN SUCCESS")
+                        )
+                    }catch (e:Exception){
+                        call.respond(HttpStatusCode.BadRequest)
+                    }
+                }
+            }
+        }
+    }
+}
+
+fun Route.getStudent(){
+    get("/school/students") {
+        val schoolName = call.request.queryParameters["school_name"]
+            schoolName?.let {
+                schoolRepository.getSchoolByName(it)?.let { schoolId ->
+                    call.respond(
+                        BaseResponse(
+                            HttpStatusCode.OK.value,
+                            schoolRepository.getStudents(schoolId)
+                        )
+                    )
+                }
+        }
+    }
+}
+
+
 //for test
 fun Route.getAllTeacherSchool(){
     get("/allTeacherSchool"){

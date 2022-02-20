@@ -2,10 +2,9 @@ package com.example.models
 
 import kotlinx.serialization.Serializable
 
-data class Student (
+data class StudentDto (
     val id: String,
     var name: String,
-    var password: String,
     var age: Int,
     var note: String,
     var phone: Long ,

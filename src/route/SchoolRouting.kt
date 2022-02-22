@@ -4,10 +4,9 @@ import com.example.authentication.JwtConfig
 import com.example.database.entities.TeachersSchool
 import com.example.models.BaseResponse
 import com.example.models.School
-import com.example.models.SchoolDto
 import com.example.models.TeacherSchool
 import com.example.repostiory.SchoolRepository
-import com.example.requestBody.AddStudentBody
+import com.example.requestBody.AddUserBody
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.auth.jwt.*
@@ -82,31 +81,23 @@ fun Route.getSchoolClasses(){
     }
 }
 
-fun Route.joinToSchool() {
+fun Route.joinTeacherToSchool() {
     post("/teacher/joinSchool") {
-        val schoolName = call.request.queryParameters["school_name"]
-        call.principal<JWTPrincipal>()?.let { jwt ->
-            schoolName?.let {
-                schoolRepository.getSchoolByName(it)?.let { schoolId ->
-                    try {
-                        schoolRepository.addTeacher(
-                            schoolId,
-                            jwt.payload.getClaim(JwtConfig.CLAIM_ID).asString().toString()
-                        )
-                        call.respond(
-                            BaseResponse(
-                                HttpStatusCode.OK.value,
-                                "TEACHER JOIN SUCCESS")
-                        )
-                    }catch (e:Exception){
-                        call.respond(HttpStatusCode.BadRequest)
-                    }
-                }
+        try {
+            val body = call.receive<AddUserBody>()
+            schoolRepository.addTeacher(body.schoolName, body.userName)?.let {
+                call.respond(
+                    BaseResponse(
+                        HttpStatusCode.OK.value,
+                        "TEACHER JOIN SUCCESS"
+                    )
+                )
             }
+        } catch (e: Exception) {
+            call.respond(HttpStatusCode.BadRequest)
         }
     }
 }
-
 fun Route.getTeachers(){
     get("/school/teachers") {
         val schoolName = call.request.queryParameters["school_name"]
@@ -126,8 +117,8 @@ fun Route.getTeachers(){
 fun Route.joinStudentToSchool() {
     post("/student/joinSchool") {
         try {
-            val body = call.receive<AddStudentBody>()
-                schoolRepository.addStudent(body.schoolName, body.studentName)?.let {
+            val body = call.receive<AddUserBody>()
+                schoolRepository.addStudent(body.schoolName, body.userName)?.let {
                     call.respond(
                         BaseResponse(
                             HttpStatusCode.OK.value,

@@ -1,6 +1,6 @@
 package com.example.requestBody
 
-data class AddStudentBody (
-    val studentName: String,
+data class AddUserBody (
+    val userName: String,
     val schoolName: String
     )

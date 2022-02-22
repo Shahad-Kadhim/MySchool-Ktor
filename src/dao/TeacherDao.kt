@@ -3,6 +3,7 @@ package com.example.dao
 import com.example.authentication.Role
 import com.example.database.entities.*
 import com.example.models.*
+import com.example.util.toStudent
 import com.example.util.toTeacher
 import com.example.util.toTeacherList
 import com.example.util.toUserDto
@@ -38,6 +39,14 @@ class TeacherDao(
             (Users innerJoin  Teachers)
                 .select(Teachers.id.eq(id)).firstOrNull()?.toTeacher()
         }
+
+
+    fun getTeacherByName(name: String): TeacherList? =
+        transaction {
+            (Users innerJoin Teachers)
+                .select(Users.name.eq(name)).firstOrNull()?.toTeacherList()
+        }
+
 
     fun getClasses(id: String): List<ClassDto> =
         transaction {

@@ -101,9 +101,9 @@ fun Schools.insertSchool(school: School){
     }
 }
 
-fun TeachersSchool.joinTeacher(school: String, teacher: String){
+fun TeachersSchool.joinTeacher(school: String, teacher: TeacherList){
     this.insert {
-        it[teacherId] = teacher
+        it[teacherId] = teacher.id
         it[schoolId] = school
         it[dateJoined]= Date().time
     }

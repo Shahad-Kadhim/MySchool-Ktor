@@ -64,11 +64,17 @@ class SchoolDao(
 
 
 
-    fun addTeacher(schoolId: String, teacherId: String) {
-        transaction {
-            TeachersSchool.joinTeacher(schoolId,teacherId)
+    fun addTeacher(schoolName: String, teacherName: String) =
+        transaction{
+            teacherDao.getTeacherByName(teacherName)?.let { teacher ->
+                getSchoolByName(schoolName)?.let {
+                    TeachersSchool.joinTeacher(it, teacher)
+                    return@transaction true
+                }
+            }
+            return@transaction null
         }
-    }
+
 
     fun getTeachers(schoolId: String): List<UserDto> =
         transaction {

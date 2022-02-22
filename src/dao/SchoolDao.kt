@@ -83,11 +83,15 @@ class SchoolDao(
                 .map { it[TeachersSchool.teacherId] }
         }
 
-    fun addStudent(schoolId: String,studentId: String) =
+    fun addStudent(schoolName: String,studentName: String) =
         transaction{
-            studentDao.getStudentById(studentId)?.let { student ->
-                StudentsSchool.joinStudent(schoolId, student)
+            studentDao.getStudentByName(studentName)?.let { student ->
+                getSchoolByName(schoolName)?.let {
+                    StudentsSchool.joinStudent(it, student)
+                    return@transaction true
+                }
             }
+            return@transaction null
         }
 
     fun getStudents(schoolId: String): List<StudentDto> =

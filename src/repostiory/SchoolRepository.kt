@@ -35,9 +35,9 @@ class SchoolRepository(
     fun getTeachers(schoolId: String) =
         schoolDao.getTeachers(schoolId)
 
-    fun addStudent(schoolId: String, studentId: String) {
-        schoolDao.addStudent(schoolId,studentId)
-    }
+    fun addStudent(schoolName: String, studentName: String) =
+        schoolDao.addStudent(schoolName,studentName)
+
 
     fun getStudents(schoolId: String) =
         schoolDao.getStudents(schoolId)

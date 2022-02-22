@@ -40,6 +40,11 @@ class StudentDao {
                 .select(Students.id.eq(id)).firstOrNull()?.toStudent()
         }
 
+    fun getStudentByName(name: String): StudentDto? =
+        transaction {
+            (Users innerJoin Students)
+                .select(Users.name.eq(name)).firstOrNull()?.toStudent()
+        }
 
     fun getStudentClasses(studentId: String) =
         MemberClass

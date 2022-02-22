@@ -7,6 +7,7 @@ import com.example.models.School
 import com.example.models.SchoolDto
 import com.example.models.TeacherSchool
 import com.example.repostiory.SchoolRepository
+import com.example.requestBody.AddStudentBody
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.auth.jwt.*
@@ -124,30 +125,21 @@ fun Route.getTeachers(){
 
 fun Route.joinStudentToSchool() {
     post("/student/joinSchool") {
-        println("GGGGGGGGGGGGGGGGGGGGGGGGG")
-        val schoolName = call.request.queryParameters["school_name"]
-        call.principal<JWTPrincipal>()?.let { jwt ->
-            println("GGGGGGGGGGGGGGGGGGGGGGGGG")
-            schoolName?.let {
-                schoolRepository.getSchoolByName(it)?.let { schoolId ->
-                    try {
-                        println("GGGGGGGGGGGGGGGGGGGGGGGGG")
-                        schoolRepository.addStudent(
-                            schoolId,
-                            jwt.payload.getClaim(JwtConfig.CLAIM_ID).asString().toString()
+        try {
+            val body = call.receive<AddStudentBody>()
+                schoolRepository.addStudent(body.schoolName, body.studentName)?.let {
+                    call.respond(
+                        BaseResponse(
+                            HttpStatusCode.OK.value,
+                            "STUDENT JOIN SUCCESS"
                         )
-                        call.respond(
-                            BaseResponse(
-                                HttpStatusCode.OK.value,
-                                "STUDENT JOIN SUCCESS")
-                        )
-                    }catch (e:Exception){
-                        call.respond(HttpStatusCode.BadRequest)
-                    }
+                    )
                 }
-            }
+        }catch (e:Exception){
+            call.respond(HttpStatusCode.BadRequest)
         }
     }
+
 }
 
 fun Route.getStudent(){

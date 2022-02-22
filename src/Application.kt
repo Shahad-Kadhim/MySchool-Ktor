@@ -109,7 +109,6 @@ fun Routing.testRoute() {
 
 fun Routing.student() {
     authenticate("auth-student") {
-        joinStudentToSchool()
     }
 }
 
@@ -125,6 +124,7 @@ fun Routing.school() {
     authenticate("auth-manger") {
         getSchoolById()
         createSchool()
+        joinStudentToSchool()
         getSchoolClasses()
     }
 }

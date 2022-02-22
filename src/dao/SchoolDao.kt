@@ -4,6 +4,7 @@ import com.example.database.entities.*
 import com.example.models.School
 import com.example.models.StudentDto
 import com.example.models.TeacherList
+import com.example.models.UserDto
 import com.example.util.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.select
@@ -69,7 +70,7 @@ class SchoolDao(
         }
     }
 
-    fun getTeachers(schoolId: String): List<TeacherList> =
+    fun getTeachers(schoolId: String): List<UserDto> =
         transaction {
             teacherDao.getAllTeachers(
                 getTeachersInSchool(schoolId)
@@ -94,7 +95,7 @@ class SchoolDao(
             return@transaction null
         }
 
-    fun getStudents(schoolId: String): List<StudentDto> =
+    fun getStudents(schoolId: String): List<UserDto> =
         transaction {
             studentDao.getAllStudents(getStudentInSchool(schoolId))
         }

@@ -2,12 +2,10 @@ package com.example.dao
 
 import com.example.authentication.Role
 import com.example.database.entities.*
-import com.example.models.ClassDto
-import com.example.models.SchoolDto
-import com.example.models.Teacher
-import com.example.models.TeacherList
+import com.example.models.*
 import com.example.util.toTeacher
 import com.example.util.toTeacherList
+import com.example.util.toUserDto
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
@@ -26,12 +24,12 @@ class TeacherDao(
                 }
         }
 
-    fun getAllTeachers(teachersId: List<String>): List<TeacherList> =
+    fun getAllTeachers(teachersId: List<String>): List<UserDto> =
         transaction {
             (Teachers innerJoin Users)
                 .select(Users.role.eq(Role.TEACHER.name) and Users.id.inList(teachersId))
                 .map {
-                    it.toTeacherList()
+                    it.toUserDto()
                 }
         }
 

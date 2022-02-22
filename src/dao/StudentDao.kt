@@ -5,8 +5,10 @@ import com.example.database.entities.*
 import com.example.models.Student
 import com.example.models.StudentDto
 import com.example.models.Teacher
+import com.example.models.UserDto
 import com.example.util.toStudent
 import com.example.util.toTeacher
+import com.example.util.toUserDto
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
@@ -23,12 +25,12 @@ class StudentDao {
             }
         }
 
-    fun getAllStudents(studentsId: List<String>): List<StudentDto> =
+    fun getAllStudents(studentsId: List<String>): List<UserDto> =
         transaction {
             (Students innerJoin Users)
                 .select(Users.role.eq(Role.STUDENT.name) and Users.id.inList(studentsId))
                 .map {
-                    it.toStudent()
+                    it.toUserDto()
                 }
         }
 

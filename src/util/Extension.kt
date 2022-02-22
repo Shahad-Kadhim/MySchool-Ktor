@@ -17,6 +17,13 @@ fun ResultRow.toStudent() = StudentDto(
     stage = this[Students.stage]
 )
 
+fun ResultRow.toUserDto() = UserDto(
+    id=this[Users.id],
+    name = this[Users.name],
+    phone = this[Users.phone],
+    role = this[Users.role].toRole()
+)
+
 fun ResultRow.toTeacher() = Teacher(
     id=this[Teachers.id],
     name = this[Users.name],

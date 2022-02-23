@@ -3,7 +3,9 @@ package com.example.dao
 import com.example.database.entities.*
 import com.example.models.Class
 import com.example.models.Student
+import com.example.models.UserDto
 import com.example.util.insertClass
+import com.example.util.joinStudent
 import com.example.util.toClass
 import com.example.util.toStudent
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -11,7 +13,9 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
-class ClassDao {
+class ClassDao(
+    private val studentDao: StudentDao
+) {
 
     fun getAllClasses(): List<Class> =
         transaction {
@@ -32,7 +36,12 @@ class ClassDao {
             Classes.insertClass(classI)
         }
 
-    fun getMembersOfClass(classId: String) =
+    fun getStudentInClass(classId: String):List<UserDto> =
+        transaction {
+            studentDao.getAllStudents(getMembersOfClass(classId))
+        }
+
+    private fun getMembersOfClass(classId: String) =
         transaction {
             MemberClass
                 .slice(MemberClass.studentId)
@@ -40,6 +49,11 @@ class ClassDao {
                 .map {
                     it[MemberClass.studentId]
                 }
-
         }
+
+    fun addStudentsInClass(studentsId :List<String>,classId: String) =
+        transaction {
+            MemberClass.joinStudent(studentsId,classId)
+        }
+
 }

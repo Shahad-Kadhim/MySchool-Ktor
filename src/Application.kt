@@ -92,6 +92,7 @@ fun Application.module(testing: Boolean = false) {
         classes()
         addUser()
         loginUser()
+        getClassMembers()
         addRole()
         getRoles()
         testRoute()
@@ -116,6 +117,7 @@ fun Routing.teacher() {
     authenticate("auth-teacher") {
         getTeacherClasses()
         getTeacherSchools()
+        addStudentToCLass()
     }
 }
 
@@ -133,7 +135,6 @@ fun Routing.classes() {
     authenticate("auth-teacher") {
         createClass()
         getClassById()
-        getClassMembers()
     }
 }
 

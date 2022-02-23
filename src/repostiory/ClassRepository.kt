@@ -17,10 +17,11 @@ class ClassRepository(
 
 
     fun getMembers(classId: String) =
-        classDao.getMembersOfClass(classId)
+        classDao.getStudentInClass(classId)
 
     fun getAllClasses(): List<Class> =
         classDao.getAllClasses()
 
-
+    fun addStudentToClass(studentsId: List<String>, classId: String) =
+        classDao.addStudentsInClass(studentsId,classId)
 }

@@ -3,6 +3,7 @@ package com.example.route
 import com.example.authentication.JwtConfig
 import com.example.models.BaseResponse
 import com.example.models.Class
+import com.example.requestBody.MembersClassBody
 import com.example.repostiory.ClassRepository
 import com.example.repostiory.SchoolRepository
 import com.example.requestBody.CreateClassBody
@@ -86,3 +87,20 @@ fun Route.getClassMembers(){
 }
 
 
+fun Route.addStudentToCLass(){
+    post("class/addMember"){
+        try {
+            call.receive<MembersClassBody>().let {
+                classRepository.addStudentToClass(it.studentsId,it.classId)
+                call.respond(
+                    BaseResponse(
+                        HttpStatusCode.Accepted.value,
+                        "STUDENTS JOIN SUCCESS"
+                    )
+                )
+            }
+        }catch (e: Exception){
+            call.respond(HttpStatusCode.BadRequest)
+        }
+    }
+}

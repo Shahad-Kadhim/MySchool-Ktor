@@ -5,6 +5,7 @@ import com.example.dao.toRole
 import com.example.database.entities.*
 import com.example.models.*
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.batchInsert
 import org.jetbrains.exposed.sql.insert
 import java.util.*
 
@@ -116,6 +117,15 @@ fun StudentsSchool.joinStudent(schoolId: String, student: StudentDto){
         it[dateJoined]= Date().time
     }
 }
+
+
+fun MemberClass.joinStudent(studentsId: List<String>, mClassId: String) =
+    this.batchInsert(studentsId){ item  ->
+        this[studentId] = item
+        this[classId] = mClassId
+        this[dateJoined] =Date().time
+    }
+
 
 
 fun Users.insertUser(user: User){

@@ -7,6 +7,6 @@ object MemberClass: Table("member-class") {
 
     val studentId =( varchar("studentId",50) references Students.id)
     val classId = (varchar("classId",50) references Classes.id)
-    val dateJoined = datetime("dateJoined")
+    val dateJoined = long("dateJoined")
 
 }

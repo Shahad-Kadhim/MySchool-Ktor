@@ -11,8 +11,8 @@ class TeacherRepository(
     fun getTeacherById(id: String)=
         teacherDao.getTeacherById(id)
 
-    fun getTeacherClasses(id: String)=
-        teacherDao.getClasses(id)
+    fun getTeacherClasses(id: String,searchKey: String?)=
+        teacherDao.getClassesOfTeacher(id, searchKey)
 
     fun getAllTeacher(): List<TeacherList> =
         teacherDao.getAllTeachers()

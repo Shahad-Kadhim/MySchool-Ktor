@@ -33,7 +33,8 @@ fun Route.getTeacherClasses(){
                 BaseResponse(
                     HttpStatusCode.OK.value,
                     teacherRepository.getTeacherClasses(
-                        it.payload.getClaim(JwtConfig.CLAIM_ID).asString()
+                        it.payload.getClaim(JwtConfig.CLAIM_ID).asString(),
+                        call.parameters["search"]
                     ),
                 )
             )

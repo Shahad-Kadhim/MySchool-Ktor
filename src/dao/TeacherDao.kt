@@ -7,10 +7,13 @@ import com.example.util.toStudent
 import com.example.util.toTeacher
 import com.example.util.toTeacherList
 import com.example.util.toUserDto
+import kotlinx.coroutines.selects.select
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
 import org.jetbrains.exposed.sql.transactions.transaction
+import java.lang.Class
 
 class TeacherDao(
     private val userDao: UserDao
@@ -48,15 +51,15 @@ class TeacherDao(
         }
 
 
-    fun getClasses(id: String): List<ClassDto> =
+    fun getClassesOfTeacher(teacherId: String, searchKey: String?): List<ClassDto> =
         transaction {
             (Teachers innerJoin Classes)
-                .select { (Classes.teacherId.eq(id)) }
+                .select { (Classes.teacherId.eq(teacherId)) and Classes.name.like("${searchKey ?: ""}%")  }
                 .map{
                     ClassDto(
                         it[Classes.id],
                         it[Classes.name],
-                        getTeacherById(id)?.name ?: "",
+                        getTeacherById(teacherId)?.name ?: "",
                         it[Classes.stage]
                     )
                 }

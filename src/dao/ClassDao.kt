@@ -36,9 +36,10 @@ class ClassDao(
             Classes.insertClass(classI)
         }
 
-    fun getStudentInClass(classId: String):List<UserDto> =
+    //TODO REMOVE INITIAL VALUE
+    fun getStudentInClass(classId: String,searchKey: String? =null):List<UserDto> =
         transaction {
-            studentDao.getAllStudents(getMembersOfClass(classId))
+            studentDao.getAllStudents(getMembersOfClass(classId),searchKey)
         }
 
     private fun getMembersOfClass(classId: String) =

@@ -12,6 +12,7 @@ import com.example.util.toUserDto
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class StudentDao {
@@ -25,10 +26,10 @@ class StudentDao {
             }
         }
 
-    fun getAllStudents(studentsId: List<String>): List<UserDto> =
+    fun getAllStudents(studentsId: List<String>, searchKey: String?): List<UserDto> =
         transaction {
             (Students innerJoin Users)
-                .select(Users.role.eq(Role.STUDENT.name) and Users.id.inList(studentsId))
+                .select(Users.role.eq(Role.STUDENT.name) and Users.id.inList(studentsId) and Users.name.like("${searchKey ?: ""}%") )
                 .map {
                     it.toUserDto()
                 }

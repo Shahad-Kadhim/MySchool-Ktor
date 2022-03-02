@@ -106,7 +106,10 @@ fun Route.getTeachers(){
                     call.respond(
                         BaseResponse(
                             HttpStatusCode.OK.value,
-                            schoolRepository.getTeachers(schoolId)
+                            schoolRepository.getTeachers(
+                                schoolId,
+                                call.parameters["search"]
+                            )
                         )
                     )
                 }
@@ -141,7 +144,10 @@ fun Route.getStudent(){
                     call.respond(
                         BaseResponse(
                             HttpStatusCode.OK.value,
-                            schoolRepository.getStudents(schoolId)
+                            schoolRepository.getStudents(
+                                schoolId,
+                                call.parameters["search"]
+                            )
                         )
                     )
                 }

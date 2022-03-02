@@ -2,8 +2,6 @@ package com.example.dao
 
 import com.example.database.entities.*
 import com.example.models.School
-import com.example.models.StudentDto
-import com.example.models.TeacherList
 import com.example.models.UserDto
 import com.example.util.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -76,10 +74,11 @@ class SchoolDao(
         }
 
 
-    fun getTeachers(schoolId: String): List<UserDto> =
+    fun getTeachers(schoolId: String, searchKey: String?): List<UserDto> =
         transaction {
             teacherDao.getAllTeachers(
-                getTeachersInSchool(schoolId)
+                getTeachersInSchool(schoolId),
+                searchKey
             )
         }
 
@@ -101,9 +100,9 @@ class SchoolDao(
             return@transaction null
         }
 
-    fun getStudents(schoolId: String): List<UserDto> =
+    fun getStudents(schoolId: String,seacrhKey: String?): List<UserDto> =
         transaction {
-            studentDao.getAllStudents(getStudentInSchool(schoolId))
+            studentDao.getAllStudents(getStudentInSchool(schoolId),seacrhKey)
         }
 
     private fun getStudentInSchool(schoolId: String): List<String> =

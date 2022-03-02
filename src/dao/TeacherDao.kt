@@ -28,10 +28,10 @@ class TeacherDao(
                 }
         }
 
-    fun getAllTeachers(teachersId: List<String>): List<UserDto> =
+    fun getAllTeachers(teachersId: List<String>,searchKey: String?): List<UserDto> =
         transaction {
             (Teachers innerJoin Users)
-                .select(Users.role.eq(Role.TEACHER.name) and Users.id.inList(teachersId))
+                .select(Users.role.eq(Role.TEACHER.name) and Users.id.inList(teachersId) and Users.name.like("${searchKey ?: ""}%"))
                 .map {
                     it.toUserDto()
                 }

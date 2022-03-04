@@ -2,19 +2,20 @@ package com.example.dao
 
 import com.example.database.entities.*
 import com.example.models.Class
-import com.example.models.Student
 import com.example.models.UserDto
 import com.example.util.insertClass
 import com.example.util.joinStudent
 import com.example.util.toClass
-import com.example.util.toStudent
+import com.example.models.UserSelected
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.notInList
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class ClassDao(
-    private val studentDao: StudentDao
+    private val studentDao: StudentDao,
 ) {
 
     fun getAllClasses(): List<Class> =
@@ -57,4 +58,21 @@ class ClassDao(
             MemberClass.joinStudent(studentsId,classId)
         }
 
+    fun getStudentInSchoolToAddToClass(classId: String): List<UserSelected>? =
+        getClassById(classId)?.let {
+            getStudentsNotInClass(it)
+        }
+
+
+    private fun getStudentsNotInClass(mClass: Class): List<UserSelected> =
+        transaction {
+            studentDao.getAllStudents(
+                StudentsSchool
+                    .select(StudentsSchool.schoolId.eq(mClass.schoolId) and (StudentsSchool.studentId.notInList(getMembersOfClass(mClass.id))))
+                    .map { it[StudentsSchool.studentId] },
+                null
+            ).map {
+                UserSelected(it.id,it.name,false)
+            }
+        }
 }

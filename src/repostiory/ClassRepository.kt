@@ -2,6 +2,7 @@ package com.example.repostiory
 
 import com.example.dao.ClassDao
 import com.example.models.Class
+import com.example.models.UserSelected
 
 class ClassRepository(
     private val  classDao: ClassDao
@@ -24,4 +25,7 @@ class ClassRepository(
 
     fun addStudentToClass(studentsId: List<String>, classId: String) =
         classDao.addStudentsInClass(studentsId,classId)
+
+    fun getStudentInSchoolToAddToClass(classId: String): List<UserSelected>? =
+        classDao.getStudentInSchoolToAddToClass(classId)
 }

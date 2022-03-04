@@ -86,6 +86,21 @@ fun Route.getClassMembers(){
     }
 }
 
+fun Route.getStudentInSchool(){
+    get("/studentSchool"){
+        call.parameters["classId"]?.let{
+            classRepository.getStudentInSchoolToAddToClass(it)?.let { students ->
+                call.respond(
+                    BaseResponse(
+                        HttpStatusCode.OK.value,
+                        students
+                    )
+                )
+            }
+        }
+    }
+}
+
 
 fun Route.addStudentToCLass(){
     post("class/addMember"){
@@ -104,3 +119,4 @@ fun Route.addStudentToCLass(){
         }
     }
 }
+

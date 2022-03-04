@@ -161,3 +161,5 @@ fun String.toRole(): Role?=
             null
         }
     }
+
+fun Any?.isNotNull() = this != null

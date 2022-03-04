@@ -118,6 +118,7 @@ fun Routing.teacher() {
         getTeacherClasses()
         getTeacherSchools()
         addStudentToCLass()
+        getStudentInSchool()
     }
 }
 

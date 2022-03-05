@@ -3,10 +3,7 @@ package com.example.dao
 import com.example.authentication.Role
 import com.example.database.entities.*
 import com.example.models.*
-import com.example.util.toStudent
-import com.example.util.toTeacher
-import com.example.util.toTeacherList
-import com.example.util.toUserDto
+import com.example.util.*
 import kotlinx.coroutines.selects.select
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -28,12 +25,12 @@ class TeacherDao(
                 }
         }
 
-    fun getAllTeachers(teachersId: List<String>,searchKey: String?): List<UserDto> =
+    fun getAllTeachers(teachersId: List<String>,searchKey: String?): List<UserSelected> =
         transaction {
             (Teachers innerJoin Users)
                 .select(Users.role.eq(Role.TEACHER.name) and Users.id.inList(teachersId) and Users.name.like("${searchKey ?: ""}%"))
                 .map {
-                    it.toUserDto()
+                    it.toUserSelected()
                 }
         }
 

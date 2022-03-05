@@ -3,6 +3,7 @@ package com.example.dao
 import com.example.database.entities.*
 import com.example.models.School
 import com.example.models.UserDto
+import com.example.models.UserSelected
 import com.example.util.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.select
@@ -74,7 +75,7 @@ class SchoolDao(
         }
 
 
-    fun getTeachers(schoolId: String, searchKey: String?): List<UserDto> =
+    fun getTeachers(schoolId: String, searchKey: String?): List<UserSelected> =
         transaction {
             teacherDao.getAllTeachers(
                 getTeachersInSchool(schoolId),

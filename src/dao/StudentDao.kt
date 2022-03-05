@@ -1,18 +1,18 @@
 package com.example.dao
 
 import com.example.authentication.Role
-import com.example.database.entities.*
-import com.example.models.Student
+import com.example.database.entities.MemberClass
+import com.example.database.entities.Students
+import com.example.database.entities.Users
 import com.example.models.StudentDto
-import com.example.models.Teacher
 import com.example.models.UserDto
 import com.example.util.toStudent
-import com.example.util.toTeacher
 import com.example.util.toUserDto
-import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
+import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class StudentDao {

@@ -24,6 +24,11 @@ fun ResultRow.toUserDto() = UserDto(
     phone = this[Users.phone],
     role = this[Users.role].toRole()
 )
+fun ResultRow.toUserSelected() = UserSelected(
+    id=this[Users.id],
+    name = this[Users.name],
+    isSelected = false
+)
 
 fun ResultRow.toTeacher() = Teacher(
     id=this[Teachers.id],

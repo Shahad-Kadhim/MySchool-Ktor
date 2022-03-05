@@ -6,7 +6,6 @@ import com.example.models.UserDto
 import com.example.util.insertClass
 import com.example.util.joinStudent
 import com.example.util.toClass
-import com.example.models.UserSelected
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.notInList
 import org.jetbrains.exposed.sql.and
@@ -38,7 +37,7 @@ class ClassDao(
         }
 
     //TODO REMOVE INITIAL VALUE
-    fun getStudentInClass(classId: String,searchKey: String? =null):List<UserSelected> =
+    fun getStudentInClass(classId: String,searchKey: String? =null):List<UserDto> =
         transaction {
             studentDao.getAllStudents(getMembersOfClass(classId),searchKey)
         }
@@ -58,13 +57,13 @@ class ClassDao(
             MemberClass.joinStudent(studentsId,classId)
         }
 
-    fun getStudentInSchoolToAddToClass(classId: String): List<UserSelected>? =
+    fun getStudentInSchoolToAddToClass(classId: String): List<UserDto>? =
         getClassById(classId)?.let {
             getStudentsNotInClass(it)
         }
 
 
-    private fun getStudentsNotInClass(mClass: Class): List<UserSelected> =
+    private fun getStudentsNotInClass(mClass: Class): List<UserDto> =
         transaction {
             studentDao.getAllStudents(
                 StudentsSchool

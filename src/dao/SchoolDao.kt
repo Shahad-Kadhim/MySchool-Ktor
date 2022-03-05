@@ -101,9 +101,9 @@ class SchoolDao(
             return@transaction null
         }
 
-    fun getStudents(schoolId: String,seacrhKey: String?): List<UserDto> =
+    fun getStudents(schoolId: String,searchKey: String?): List<UserSelected> =
         transaction {
-            studentDao.getAllStudents(getStudentInSchool(schoolId),seacrhKey)
+            studentDao.getAllStudents(getStudentInSchool(schoolId),searchKey)
         }
 
     private fun getStudentInSchool(schoolId: String): List<String> =

@@ -38,7 +38,7 @@ class ClassDao(
         }
 
     //TODO REMOVE INITIAL VALUE
-    fun getStudentInClass(classId: String,searchKey: String? =null):List<UserDto> =
+    fun getStudentInClass(classId: String,searchKey: String? =null):List<UserSelected> =
         transaction {
             studentDao.getAllStudents(getMembersOfClass(classId),searchKey)
         }
@@ -71,8 +71,6 @@ class ClassDao(
                     .select(StudentsSchool.schoolId.eq(mClass.schoolId) and (StudentsSchool.studentId.notInList(getMembersOfClass(mClass.id))))
                     .map { it[StudentsSchool.studentId] },
                 null
-            ).map {
-                UserSelected(it.id,it.name,false)
-            }
+            )
         }
 }

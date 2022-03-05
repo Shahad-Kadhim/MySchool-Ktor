@@ -6,8 +6,10 @@ import com.example.database.entities.Students
 import com.example.database.entities.Users
 import com.example.models.StudentDto
 import com.example.models.UserDto
+import com.example.models.UserSelected
 import com.example.util.toStudent
 import com.example.util.toUserDto
+import com.example.util.toUserSelected
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
@@ -26,12 +28,12 @@ class StudentDao {
             }
         }
 
-    fun getAllStudents(studentsId: List<String>, searchKey: String?): List<UserDto> =
+    fun getAllStudents(studentsId: List<String>, searchKey: String?): List<UserSelected> =
         transaction {
             (Students innerJoin Users)
                 .select(Users.role.eq(Role.STUDENT.name) and Users.id.inList(studentsId) and Users.name.like("${searchKey ?: ""}%") )
                 .map {
-                    it.toUserDto()
+                    it.toUserSelected()
                 }
         }
 

@@ -2,8 +2,7 @@ package com.example.database.entities
 
 import org.jetbrains.exposed.sql.Table
 
-
-object Duties : Table("duty") {
+object Lesson: Table("lesson") {
     val id = varchar("id",50).primaryKey() references Posts.id
-    val degree = integer("degree").default(10)
+    val lastDateUpdated = long("lastDateUpdated").nullable()
 }

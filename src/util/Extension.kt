@@ -2,6 +2,7 @@ package com.example.util
 
 import com.example.authentication.Role
 import com.example.dao.toRole
+import com.example.database.PostType
 import com.example.database.entities.*
 import com.example.models.*
 import org.jetbrains.exposed.sql.ResultRow
@@ -146,6 +147,35 @@ fun ResultRow.toUser()=
         this[Users.role].toRole(),
     )
 
+fun ResultRow.toPostDto(authorName: String)=
+    PostDto(
+        this[Posts.id],
+        this[Posts.title],
+        this[Posts.content],
+        this[Posts.payload],
+        authorName,
+        this[Posts.datePosted],
+        this[Posts.type].toPostType()
+    )
+
+fun ResultRow.toLessonDto(authorName: String)=
+    LessonDto(
+        this[Posts.id],
+        this[Posts.title],
+        this[Posts.content],
+        this[Posts.payload],
+        authorName,
+        this[Posts.datePosted],
+        this[Lesson.lastDateUpdated]
+    )
+
+fun String.toPostType(): PostType =
+    when(this){
+        PostType.LESSON.name -> PostType.LESSON
+        PostType.DUTY.name -> PostType.DUTY
+        else -> PostType.DUTY
+    }
+
 fun String.toRole(): Role?=
     when(this.lowercase()){
         "teacher" ->{
@@ -163,3 +193,27 @@ fun String.toRole(): Role?=
     }
 
 fun Any?.isNotNull() = this != null
+
+
+fun Posts.insertPost(post: Post){
+    this.insert {
+        it[id] = post.id
+        it[title] = post.title
+        it[content] = post.content
+        it[classId] = post.classId
+        it[payload] = post.payload
+        it[datePosted] = post.datePosted
+        it[authorId] = post.authorId
+        it[type] = post.type.name
+    }
+}
+fun Lesson.insertLesson(postId: String){
+    this.insert{
+        it[id] =postId
+    }
+}
+fun Duties.insertDuty(postId: String){
+    this.insert{
+        it[id] =postId
+    }
+}

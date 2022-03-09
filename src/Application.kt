@@ -39,9 +39,11 @@ fun Application.module(testing: Boolean = false) {
         SchemaUtils.drop(
 //            TeachersSchool,
 //            MemberClass,
+//            DutyStudent,
 //            Duties,
 //            Classes,
 //            Students,
+//            Lesson,
 //            Comments,
 //            Posts,
 //            Teachers ,
@@ -60,6 +62,8 @@ fun Application.module(testing: Boolean = false) {
             Students,
             Classes,
             Duties,
+            Lesson,
+            DutyStudent,
             MemberClass,
             TeachersSchool,
             StudentsSchool
@@ -96,6 +100,8 @@ fun Application.module(testing: Boolean = false) {
         addRole()
         getRoles()
         testRoute()
+        getLessonInCLass()
+        getPostInCLass()
     }
 }
 
@@ -119,6 +125,7 @@ fun Routing.teacher() {
         getTeacherSchools()
         addStudentToCLass()
         getStudentInSchool()
+        createPost()
     }
 }
 

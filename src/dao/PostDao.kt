@@ -21,16 +21,14 @@ class PostDao(
     fun createPost(post: Post){
         transaction {
             Posts.insertPost(post)
+            insertByType(post.id,post.type)
         }
-        insertByType(post.id,post.type)
     }
 
     private fun insertByType(id: String, type: PostType) {
-        transaction {
-            when(type){
-                PostType.LESSON -> Lesson.insertLesson(id)
-                PostType.DUTY -> Duties.insertDuty(id)
-            }
+        when(type){
+            PostType.LESSON -> Lesson.insertLesson(id)
+            PostType.DUTY -> Duties.insertDuty(id)
         }
     }
 

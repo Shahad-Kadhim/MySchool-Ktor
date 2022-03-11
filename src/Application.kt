@@ -38,7 +38,7 @@ fun Application.module(testing: Boolean = false) {
     transaction {
         SchemaUtils.drop(
 //            TeachersSchool,
-            MemberClass,
+//            MemberClass,
 //            DutyStudent,
 //            Duties,
 //            Students,

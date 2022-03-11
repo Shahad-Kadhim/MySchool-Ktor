@@ -87,3 +87,45 @@ fun Route.getPostInCLass(){
         }
     }
 }
+
+//fun Route.upload(){
+//    var fileDescription = ""
+//    var fileName = ""
+//
+//    post("/upload") {
+//        val multipartData = call.receiveMultipart()
+//
+//        multipartData.forEachPart { part ->
+//            when (part) {
+//                is PartData.FormItem -> {
+//                    fileDescription = part.value
+//                }
+//                is PartData.FileItem -> {
+//                    fileName = part.originalFileName as String
+//                    var fileBytes = part.streamProvider().readBytes()
+//                    File("uploads/$fileName").writeBytes(fileBytes)
+//                }
+//            }
+//        }
+//
+//        call.respondText("$fileDescription is uploaded to 'uploads/$fileName'")
+//    }
+//}
+//
+//suspend fun ss(){
+//    val response = HttpClient().submitFormWithBinaryData(
+//        url = "http://localhost:8080/upload",
+//        formData = formData {
+//            append("description", "Ktor logo")
+//            append("image", File("ktor_logo.png").readBytes(), Headers.build {
+//                append(HttpHeaders.ContentType, "image/png")
+//                append(HttpHeaders.ContentDisposition, "filename=ktor_logo.png")
+//            })
+//        }
+//    ) {
+//        onUpload { bytesSentTotal, contentLength ->
+//            println("Sent $bytesSentTotal bytes from $contentLength")
+//        }
+//    }
+//
+//}

@@ -1,10 +1,10 @@
 package com.example.models
 
 
-data class Comment(
+data class CommentDto(
     val id: String,
     val postId: String,
-    val authorId: String,
+    val authorName: String,
     var content: String,
     val dateCommented: Long
 )

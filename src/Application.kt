@@ -102,6 +102,10 @@ fun Application.module(testing: Boolean = false) {
         testRoute()
         getLessonInCLass()
         getPostInCLass()
+        authenticate("auth-student","auth-manger","auth-teacher") {
+            getCommentInPost()
+            createComment()
+        }
     }
 }
 

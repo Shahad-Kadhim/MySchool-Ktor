@@ -176,6 +176,15 @@ fun String.toPostType(): PostType =
         else -> PostType.DUTY
     }
 
+fun ResultRow.toCommentDto(authorName: String?) =
+    CommentDto(
+        id =this[Comments.id],
+        authorName = authorName ?: "NONE",
+        content = this[Comments.content],
+        postId = this[Comments.postId],
+        dateCommented = this[Comments.dateCommented]
+    )
+
 fun String.toRole(): Role?=
     when(this.lowercase()){
         "teacher" ->{
@@ -207,6 +216,7 @@ fun Posts.insertPost(post: Post){
         it[type] = post.type.name
     }
 }
+
 fun Lesson.insertLesson(postId: String){
     this.insert{
         it[id] =postId
@@ -215,5 +225,17 @@ fun Lesson.insertLesson(postId: String){
 fun Duties.insertDuty(postId: String){
     this.insert{
         it[id] =postId
+    }
+}
+
+
+
+fun Comments.insertComment(comment: Comment){
+    this.insert {
+        it[id] = comment.id
+        it[content] = comment.content
+        it[postId] = comment.postId
+        it[authorId] = comment.authorId
+        it[dateCommented] = comment.dateCommented
     }
 }

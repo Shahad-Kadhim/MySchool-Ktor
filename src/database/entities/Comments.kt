@@ -9,5 +9,5 @@ object Comments: Table("comment") {
     val postId = (varchar("postId",50) references Posts.id)
     val authorId = (varchar("authorId",50) references Teachers.id)
     val content = varchar("content",100)
-    val dateCommented = datetime("dateCommented")
+    val dateCommented = long("dateCommented")
 }

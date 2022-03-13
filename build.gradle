@@ -75,4 +75,7 @@ dependencies {
     // Koin for Ktor
     implementation "io.insert-koin:koin-ktor:$koin_version"
 
+    implementation 'com.transloadit.sdk:transloadit:0.3.0'
+    implementation "org.json:json:20211205"
+
 }

@@ -23,6 +23,16 @@ class MangerDao(
         }
 
 
+    fun getMangerInfo(id: String) =
+        transaction{
+            (Users innerJoin Mangers)
+                .select { Mangers.id.eq(id) }
+                .map {
+                    it.toManger()
+                }.firstOrNull()
+        }
+
+
 
     fun getSchools(id: String): List<SchoolDto> =
         transaction {

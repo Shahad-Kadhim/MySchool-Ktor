@@ -47,3 +47,18 @@ fun Route.getMangerClasses(){
         }
     }
 }
+
+fun Route.getMangerInfo(){
+    get("manger/info") {
+        call.principal<JWTPrincipal>()?.let {
+            call.respond(
+                BaseResponse(
+                    HttpStatusCode.OK.value,
+                    mangerRepository.getMangerInfo(
+                        it.payload.getClaim(JwtConfig.CLAIM_ID).asString()
+                    )
+                )
+            )
+        }
+    }
+}

@@ -8,7 +8,7 @@ class TeacherRepository(
     private val teacherDao: TeacherDao
 ) {
 
-    fun getTeacherById(id: String)=
+    fun getTeacherInfo(id: String)=
         teacherDao.getTeacherById(id)
 
     fun getTeacherClasses(id: String,searchKey: String?)=

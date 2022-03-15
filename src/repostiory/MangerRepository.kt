@@ -7,12 +7,10 @@ import com.example.models.User
 
 class MangerRepository(
     private val mangerDao: MangerDao,
-    private val userDao: UserDao
 ) {
 
-    fun getMangerByNameAndPassword(name: String, password: String): User? =
-        userDao.findUserByNameAndPassword(name,password)
-
+    fun getMangerInfo(mangerId: String) =
+        mangerDao.getMangerInfo(mangerId)
 
     fun getMangerSchools(id: String)=
         mangerDao.getSchools(id)

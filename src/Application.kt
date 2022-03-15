@@ -105,6 +105,9 @@ fun Application.module(testing: Boolean = false) {
         authenticate("auth-student","auth-manger","auth-teacher") {
             getCommentInPost()
             createComment()
+            getTeacherInfo()
+            getStudentInfo()
+            getMangerInfo()
         }
     }
 }

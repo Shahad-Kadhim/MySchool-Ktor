@@ -40,7 +40,7 @@ fun Route.getMangerClasses(){
                 BaseResponse(
                     HttpStatusCode.OK.value,
                     mangerRepository.getMangerClasses(
-                        it.payload.getClaim(JwtConfig.CLAIM_ID).asString()
+                        call.request.queryParameters["id"] ?: it.payload.getClaim(JwtConfig.CLAIM_ID).asString()
                     )
                 )
             )

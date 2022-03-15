@@ -49,7 +49,7 @@ fun Route.getStudentInfo(){
                 BaseResponse(
                     HttpStatusCode.OK.value,
                     studentRepository.getStudentInfo(
-                        it.payload.getClaim(JwtConfig.CLAIM_ID).asString()
+                        call.request.queryParameters["id"] ?: it.payload.getClaim(JwtConfig.CLAIM_ID).asString()
                     )
                 )
             )

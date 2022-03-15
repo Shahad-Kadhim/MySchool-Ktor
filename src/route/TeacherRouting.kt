@@ -64,7 +64,7 @@ fun Route.getTeacherInfo(){
                 BaseResponse(
                     HttpStatusCode.OK.value,
                     teacherRepository.getTeacherInfo(
-                        it.payload.getClaim(JwtConfig.CLAIM_ID).asString()
+                        call.request.queryParameters["id"] ?:  it.payload.getClaim(JwtConfig.CLAIM_ID).asString()
                     ),
                 )
             )

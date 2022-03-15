@@ -60,16 +60,18 @@ class StudentDao(
             }
     //TODO LATER CHANGE RESPONSE
     fun getSchools(studentId: String) =
-        StudentsSchool
-            .select{(StudentsSchool.studentId.eq(studentId))}
-            .map {
-                schoolDao.getSchoolById(it[StudentsSchool.schoolId])?.let { school ->
-                    SchoolDto(
-                        school.id,
-                        school.name ,
-                        ""
-                    )
+       transaction {
+            StudentsSchool
+                .select { (StudentsSchool.studentId.eq(studentId)) }
+                .map {
+                    schoolDao.getSchoolById(it[StudentsSchool.schoolId])?.let { school ->
+                        SchoolDto(
+                            school.id,
+                            school.name,
+                            ""
+                        )
+                    }
                 }
-            }
+        }
 
 }

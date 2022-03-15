@@ -5,7 +5,6 @@ import com.example.database.entities.*
 import com.example.models.SchoolDto
 import com.example.models.StudentDto
 import com.example.models.UserDto
-import com.example.util.toSchool
 import com.example.util.toStudent
 import com.example.util.toUserDto
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -15,9 +14,7 @@ import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 
-class StudentDao(
-    private val schoolDao: SchoolDao
-) {
+class StudentDao {
 
     fun getAllStudents(): List<StudentDto> =
         transaction {
@@ -64,13 +61,11 @@ class StudentDao(
             StudentsSchool
                 .select { (StudentsSchool.studentId.eq(studentId)) }
                 .map {
-                    schoolDao.getSchoolById(it[StudentsSchool.schoolId])?.let { school ->
-                        SchoolDto(
-                            school.id,
-                            school.name,
-                            ""
-                        )
-                    }
+                    SchoolDto(
+                        it[StudentsSchool.schoolId],
+                        "",
+                        ""
+                    )
                 }
         }
 

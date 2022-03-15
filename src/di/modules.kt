@@ -5,6 +5,7 @@ import com.example.repostiory.*
 import com.example.route.ImageUpload
 import com.google.gson.Gson
 import com.transloadit.sdk.Transloadit
+import org.koin.core.scope.get
 import org.koin.dsl.module
 
 
@@ -20,7 +21,7 @@ val appModule = module(createdAtStart = true) {
     single { CommentRepository(get()) }
     single { SchoolDao(get(),get()) }
     single { CommentDao(get()) }
-    single { StudentDao() }
+    single { StudentDao(get()) }
     single { PostDao(get()) }
     single { TeacherDao(get()) }
     single { ClassDao(get()) }

@@ -1,11 +1,11 @@
 package com.example.dao
 
 import com.example.authentication.Role
-import com.example.database.entities.MemberClass
-import com.example.database.entities.Students
-import com.example.database.entities.Users
+import com.example.database.entities.*
+import com.example.models.SchoolDto
 import com.example.models.StudentDto
 import com.example.models.UserDto
+import com.example.util.toSchool
 import com.example.util.toStudent
 import com.example.util.toUserDto
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -15,7 +15,9 @@ import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 
-class StudentDao {
+class StudentDao(
+    private val schoolDao: SchoolDao
+) {
 
     fun getAllStudents(): List<StudentDto> =
         transaction {
@@ -55,6 +57,19 @@ class StudentDao {
             .select{(MemberClass.studentId.eq(studentId))}
             .map {
                 it[MemberClass.classId]
+            }
+    //TODO LATER CHANGE RESPONSE
+    fun getSchools(studentId: String) =
+        StudentsSchool
+            .select{(StudentsSchool.studentId.eq(studentId))}
+            .map {
+                schoolDao.getSchoolById(it[StudentsSchool.schoolId])?.let { school ->
+                    SchoolDto(
+                        school.id,
+                        school.name ,
+                        ""
+                    )
+                }
             }
 
 }

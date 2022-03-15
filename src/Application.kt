@@ -123,6 +123,7 @@ fun Routing.testRoute() {
 
 fun Routing.student() {
     authenticate("auth-student") {
+        getStudentSchool()
     }
 }
 

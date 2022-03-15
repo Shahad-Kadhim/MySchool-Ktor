@@ -17,4 +17,7 @@ class StudentRepository(
 
     fun getStudentInfo(studentId: String) =
         studentDao.getStudentById(studentId)
+
+    fun getStudentSchool(studentId: String) =
+        studentDao.getSchools(studentId)
 }

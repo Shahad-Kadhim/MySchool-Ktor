@@ -9,6 +9,7 @@ import com.example.util.toClass
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.notInList
 import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -36,6 +37,12 @@ class ClassDao(
             Classes.insertClass(classI)
         }
 
+    fun deleteClass(classId: String) =
+        transaction{
+            Classes.deleteWhere { (Classes.id.eq(classId)) }
+        }
+
+
     //TODO REMOVE INITIAL VALUE
     fun getStudentInClass(classId: String,searchKey: String? =null):List<UserDto> =
         transaction {
@@ -56,6 +63,12 @@ class ClassDao(
         transaction {
             MemberClass.joinStudent(studentsId,classId)
         }
+
+    fun removeStudentFromClass(studentId: List<String>, classId: String){
+        transaction {
+            MemberClass.deleteWhere { (MemberClass.studentId.inList(studentId) and MemberClass.classId.eq(classId)) }
+        }
+    }
 
     fun getStudentInSchoolToAddToClass(classId: String): List<UserDto>? =
         getClassById(classId)?.let {

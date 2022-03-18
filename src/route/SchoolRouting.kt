@@ -7,6 +7,7 @@ import com.example.models.School
 import com.example.models.TeacherSchool
 import com.example.repostiory.SchoolRepository
 import com.example.requestBody.AddUserBody
+import com.example.requestBody.MembersEntityBody
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.auth.jwt.*
@@ -155,7 +156,63 @@ fun Route.getStudent(){
     }
 }
 
+fun Route.deleteSchool(){
+    post("school/delete") {
+        val schoolId = call.request.queryParameters["id"]
+        call.principal<JWTPrincipal>()?.let { jwtUser ->
+            schoolId?.let { schoolId ->
+                try {
+                    schoolRepository.deleteSchool(schoolId)
+                    call.respond(
+                        BaseResponse(
+                            HttpStatusCode.Created.value,
+                            "REMOVED"
+                        )
+                    )
+                } catch (e: Exception) {
+                    call.respond(HttpStatusCode.BadRequest)
+                }
+            }
+        }
+    }
+}
 
+
+fun Route.removeStudentFromSchool(){
+    post("school/removeStudent") {
+        try {
+            call.receive<MembersEntityBody>().let {
+                schoolRepository.removeStudent(it.entityId,it.membersId)
+                call.respond(
+                    BaseResponse(
+                        HttpStatusCode.Accepted.value,
+                        "STUDENTS REMOVED SUCCESS"
+                    )
+                )
+            }
+        }catch (e: Exception){
+            call.respond(HttpStatusCode.BadRequest)
+        }
+    }
+}
+
+fun Route.removeTeacherFromSchool(){
+    post("school/removeTeacher") {
+        try {
+            call.receive<MembersEntityBody>().let {
+                schoolRepository.removeTeacher(it.entityId,it.membersId)
+                call.respond(
+                    BaseResponse(
+                        HttpStatusCode.Accepted.value,
+                        "TEACHERS REMOVED SUCCESS"
+                    )
+                )
+            }
+        }catch (e: Exception){
+            call.respond(HttpStatusCode.BadRequest)
+        }
+    }
+}
 //for test
 fun Route.getAllTeacherSchool(){
     get("/allTeacherSchool"){

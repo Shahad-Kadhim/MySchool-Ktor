@@ -132,6 +132,7 @@ fun Routing.teacher() {
         getTeacherClasses()
         getTeacherSchools()
         addStudentToCLass()
+        removeStudentFromClass()
         getStudentInSchool()
         createPost()
     }
@@ -141,8 +142,11 @@ fun Routing.school() {
     authenticate("auth-manger") {
         getSchoolById()
         createSchool()
+        deleteSchool()
         joinTeacherToSchool()
+        removeTeacherFromSchool()
         joinStudentToSchool()
+        removeStudentFromSchool()
         getSchoolClasses()
     }
 }

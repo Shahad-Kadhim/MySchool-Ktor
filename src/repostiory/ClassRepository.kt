@@ -14,6 +14,8 @@ class ClassRepository(
     fun addClass(mClass: Class) =
         classDao.createClass(mClass)
 
+    fun removeStudent(studentId:List<String>, classId: String) =
+        classDao.removeStudentFromClass(studentId,classId)
 
     fun getMembers(classId: String) =
         classDao.getStudentInClass(classId)

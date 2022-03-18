@@ -4,9 +4,8 @@ import com.example.database.entities.*
 import com.example.models.School
 import com.example.models.UserDto
 import com.example.util.*
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class SchoolDao(
@@ -33,6 +32,12 @@ class SchoolDao(
             Schools.insertSchool(school)
 
         }
+
+    fun deleteSchool(schoolId: String) =
+        transaction{
+            Schools.deleteWhere { (Schools.id.eq(schoolId)) }
+        }
+
     fun getClassesInSchool(SchoolId: String) =
         transaction {
             (Schools innerJoin Classes)
@@ -74,6 +79,13 @@ class SchoolDao(
         }
 
 
+    fun removeTeacherFromSchool(teacherId: List<String>, schoolId: String) =
+        transaction {
+            TeachersSchool.deleteWhere {
+                ( TeachersSchool.teacherId.inList(teacherId) and TeachersSchool.schoolId.eq(schoolId) )
+            }
+        }
+
     fun getTeachers(schoolId: String, searchKey: String?): List<UserDto> =
         transaction {
             teacherDao.getAllTeachers(
@@ -98,6 +110,15 @@ class SchoolDao(
                 }
             }
             return@transaction null
+        }
+
+
+
+    fun removeStudentFromSchool(studentId: List<String>, schoolId: String) =
+        transaction {
+            StudentsSchool.deleteWhere {
+                ( StudentsSchool.studentId.inList(studentId) and StudentsSchool.schoolId.eq(schoolId) )
+            }
         }
 
     fun getStudents(schoolId: String,searchKey: String?): List<UserDto> =

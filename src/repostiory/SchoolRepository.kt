@@ -8,13 +8,14 @@ class SchoolRepository(
     private val  schoolDao: SchoolDao
 ) {
 
-
     fun getSchoolById(schoolId: String)=
         schoolDao.getSchoolById(schoolId)
 
     fun addSchool(school: School) =
         schoolDao.createSchool(school)
 
+    fun deleteSchool(schoolId: String) =
+        schoolDao.deleteSchool(schoolId)
 
     fun getClasses(schoolId: String) =
         schoolDao.getClassesInSchool(schoolId)
@@ -31,6 +32,8 @@ class SchoolRepository(
     fun addTeacher(schoolName: String, teacherName: String) =
         schoolDao.addTeacher(schoolName,teacherName)
 
+    fun removeTeacher(schoolId: String, teacherId: List<String>) =
+        schoolDao.removeTeacherFromSchool(teacherId,schoolId)
 
     fun getTeachers(schoolId: String,searchKey: String?) =
         schoolDao.getTeachers(schoolId,searchKey)
@@ -38,6 +41,8 @@ class SchoolRepository(
     fun addStudent(schoolName: String, studentName: String) =
         schoolDao.addStudent(schoolName,studentName)
 
+    fun removeStudent(schoolId: String, studentId: List<String>) =
+        schoolDao.removeStudentFromSchool(studentId,schoolId)
 
     fun getStudents(schoolId: String,searchKey: String?) =
         schoolDao.getStudents(schoolId,searchKey)

@@ -3,7 +3,7 @@ package com.example.route
 import com.example.authentication.JwtConfig
 import com.example.models.BaseResponse
 import com.example.models.Class
-import com.example.requestBody.MembersClassBody
+import com.example.requestBody.MembersEntityBody
 import com.example.repostiory.ClassRepository
 import com.example.repostiory.SchoolRepository
 import com.example.requestBody.CreateClassBody
@@ -105,8 +105,8 @@ fun Route.getStudentInSchool(){
 fun Route.addStudentToCLass(){
     post("class/addMember"){
         try {
-            call.receive<MembersClassBody>().let {
-                classRepository.addStudentToClass(it.studentsId,it.classId)
+            call.receive<MembersEntityBody>().let {
+                classRepository.addStudentToClass(it.membersId,it.entityId)
                 call.respond(
                     BaseResponse(
                         HttpStatusCode.Accepted.value,
@@ -120,3 +120,20 @@ fun Route.addStudentToCLass(){
     }
 }
 
+fun Route.removeStudentFromClass(){
+    post("class/removeMember"){
+        try {
+            call.receive<MembersEntityBody>().let {
+                classRepository.removeStudent(it.membersId,it.entityId)
+                call.respond(
+                    BaseResponse(
+                        HttpStatusCode.Accepted.value,
+                        "STUDENTS REMOVED SUCCESS"
+                    )
+                )
+            }
+        }catch (e: Exception){
+            call.respond(HttpStatusCode.BadRequest)
+        }
+    }
+}

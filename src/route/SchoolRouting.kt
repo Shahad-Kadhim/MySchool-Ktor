@@ -101,19 +101,17 @@ fun Route.joinTeacherToSchool() {
 }
 fun Route.getTeachers(){
     get("/school/teachers") {
-        val schoolName = call.request.queryParameters["school_name"]
-            schoolName?.let {
-                schoolRepository.getSchoolByName(it)?.let { schoolId ->
-                    call.respond(
-                        BaseResponse(
-                            HttpStatusCode.OK.value,
-                            schoolRepository.getTeachers(
-                                schoolId,
-                                call.parameters["search"]
-                            )
-                        )
+        val schoolId = call.request.queryParameters["school_id"]
+        schoolId?.let {
+            call.respond(
+                BaseResponse(
+                    HttpStatusCode.OK.value,
+                    schoolRepository.getTeachers(
+                        it,
+                        call.parameters["search"]
                     )
-                }
+                )
+            )
         }
     }
 }
@@ -139,19 +137,17 @@ fun Route.joinStudentToSchool() {
 
 fun Route.getStudent(){
     get("/school/students") {
-        val schoolName = call.request.queryParameters["school_name"]
-            schoolName?.let {
-                schoolRepository.getSchoolByName(it)?.let { schoolId ->
-                    call.respond(
-                        BaseResponse(
-                            HttpStatusCode.OK.value,
-                            schoolRepository.getStudents(
-                                schoolId,
-                                call.parameters["search"]
-                            )
-                        )
+        val schoolId = call.request.queryParameters["school_id"]
+        schoolId?.let {
+            call.respond(
+                BaseResponse(
+                    HttpStatusCode.OK.value,
+                    schoolRepository.getStudents(
+                        it,
+                        call.parameters["search"]
                     )
-                }
+                )
+            )
         }
     }
 }

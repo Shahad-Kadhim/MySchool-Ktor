@@ -29,8 +29,8 @@ class SchoolRepository(
     fun getSchoolTeacherByNameSchool(schoolName: String, teacherId: String): String? =
         schoolDao.getSchoolTeacherByName(schoolName,teacherId)
 
-    fun addTeacher(schoolName: String, teacherName: String) =
-        schoolDao.addTeacher(schoolName,teacherName)
+    fun addTeacher(schoolId: String, teacherName: String) =
+        schoolDao.addTeacher(schoolId,teacherName)
 
     fun removeTeacher(schoolId: String, teacherId: List<String>) =
         schoolDao.removeTeacherFromSchool(teacherId,schoolId)
@@ -38,8 +38,8 @@ class SchoolRepository(
     fun getTeachers(schoolId: String,searchKey: String?) =
         schoolDao.getTeachers(schoolId,searchKey)
 
-    fun addStudent(schoolName: String, studentName: String) =
-        schoolDao.addStudent(schoolName,studentName)
+    fun addStudent(schoolId: String, studentName: String) =
+        schoolDao.addStudent(schoolId,studentName)
 
     fun removeStudent(schoolId: String, studentId: List<String>) =
         schoolDao.removeStudentFromSchool(studentId,schoolId)

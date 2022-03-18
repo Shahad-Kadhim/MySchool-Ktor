@@ -67,13 +67,11 @@ class SchoolDao(
 
 
 
-    fun addTeacher(schoolName: String, teacherName: String) =
+    fun addTeacher(schoolId: String, teacherName: String) =
         transaction{
             teacherDao.getTeacherByName(teacherName)?.let { teacher ->
-                getSchoolByName(schoolName)?.let {
-                    TeachersSchool.joinTeacher(it, teacher)
-                    return@transaction true
-                }
+                TeachersSchool.joinTeacher(schoolId, teacher)
+                return@transaction true
             }
             return@transaction null
         }
@@ -101,13 +99,11 @@ class SchoolDao(
                 .map { it[TeachersSchool.teacherId] }
         }
 
-    fun addStudent(schoolName: String,studentName: String) =
+    fun addStudent(schoolId: String,studentName: String) =
         transaction{
             studentDao.getStudentByName(studentName)?.let { student ->
-                getSchoolByName(schoolName)?.let {
-                    StudentsSchool.joinStudent(it, student)
-                    return@transaction true
-                }
+                StudentsSchool.joinStudent(schoolId, student)
+                return@transaction true
             }
             return@transaction null
         }

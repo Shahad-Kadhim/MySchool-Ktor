@@ -86,7 +86,7 @@ fun Route.joinTeacherToSchool() {
     post("/teacher/joinSchool") {
         try {
             val body = call.receive<AddUserBody>()
-            schoolRepository.addTeacher(body.schoolName, body.userName)?.let {
+            schoolRepository.addTeacher(body.schoolId, body.userName)?.let {
                 call.respond(
                     BaseResponse(
                         HttpStatusCode.OK.value,
@@ -122,7 +122,7 @@ fun Route.joinStudentToSchool() {
     post("/student/joinSchool") {
         try {
             val body = call.receive<AddUserBody>()
-                schoolRepository.addStudent(body.schoolName, body.userName)?.let {
+                schoolRepository.addStudent(body.schoolId, body.userName)?.let {
                     call.respond(
                         BaseResponse(
                             HttpStatusCode.OK.value,

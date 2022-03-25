@@ -97,13 +97,15 @@ fun Route.getPostInCLass(){
 
 fun Route.getPostById(){
     get("post/{postId}"){
-        call.parameters["postId"]?.let{
-            call.respond(
-                BaseResponse(
-                    HttpStatusCode.OK.value,
-                    postRepository.getPostDetails(it)
+        call.parameters["postId"]?.let{ postId ->
+            postRepository.getPostDetails(postId)?.let { postDetails ->
+                call.respond(
+                    BaseResponse(
+                        HttpStatusCode.OK.value,
+                        postDetails
+                    )
                 )
-            )
+            } ?: call.respond(HttpStatusCode.NotFound, "this Id : $postId not found")
         }
 
     }

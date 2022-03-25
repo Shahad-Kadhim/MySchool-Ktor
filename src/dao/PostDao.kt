@@ -59,7 +59,7 @@ class PostDao(
                         teacherDao.getTeacherById(it[Posts.authorId])?.name ?: "",
                         commentDao.getCommentsInPost(postId)
                         )
-                }
+                }.firstOrNull()
         }
 
 

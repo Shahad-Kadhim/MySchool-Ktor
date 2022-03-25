@@ -97,7 +97,7 @@ fun Route.getPostInCLass(){
 
 fun Route.getPostById(){
     get("post/{postId}"){
-        call.request.queryParameters["postId"]?.let{
+        call.parameters["postId"]?.let{
             call.respond(
                 BaseResponse(
                     HttpStatusCode.OK.value,

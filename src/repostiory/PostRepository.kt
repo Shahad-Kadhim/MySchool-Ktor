@@ -17,4 +17,6 @@ class PostRepository(
     fun getLessonByCLassId(classId: String) =
         postDao.getLessonByClassId(classId)
 
+    fun getPostDetails(postId: String) =
+        postDao.getPostByPostId(postId)
 }

@@ -158,6 +158,18 @@ fun ResultRow.toPostDto(authorName: String)=
         this[Posts.type].toPostType()
     )
 
+fun ResultRow.toPostDetailsDto(authorName: String,comments: List<CommentDto>)=
+    PostDetailsDto(
+        this[Posts.id],
+        this[Posts.title],
+        this[Posts.content],
+        this[Posts.payload],
+        authorName,
+        this[Posts.datePosted],
+        this[Posts.type].toPostType(),
+        comments
+    )
+
 fun ResultRow.toLessonDto(authorName: String)=
     LessonDto(
         this[Posts.id],

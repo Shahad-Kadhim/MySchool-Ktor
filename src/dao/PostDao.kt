@@ -6,6 +6,7 @@ import com.example.database.entities.Lesson
 import com.example.database.entities.Posts
 import com.example.models.LessonDto
 import com.example.models.Post
+import com.example.models.PostDetailsDto
 import com.example.models.PostDto
 import com.example.util.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -15,7 +16,8 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class PostDao(
-    private val teacherDao: TeacherDao
+    private val teacherDao: TeacherDao,
+    private val commentDao: CommentDao
 ) {
 
     fun createPost(post: Post){
@@ -48,6 +50,18 @@ class PostDao(
                     it.toLessonDto(teacherDao.getTeacherById(it[Posts.authorId])?.name ?: "")
                 }
         }
+
+    fun getPostByPostId(postId: String) =
+        transaction {
+            Posts.select(Posts.id.eq(postId))
+                .map {
+                    it.toPostDetailsDto(
+                        teacherDao.getTeacherById(it[Posts.authorId])?.name ?: "",
+                        commentDao.getCommentsInPost(postId)
+                        )
+                }
+        }
+
 
 
 }

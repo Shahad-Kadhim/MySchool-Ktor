@@ -20,6 +20,7 @@ import java.util.*
 
 
 private val postRepository: PostRepository by KoinJavaComponent.inject(PostRepository::class.java)
+
 private  val gson: Gson by KoinJavaComponent.inject(Gson::class.java)
 private val imageUpload: ImageUpload by KoinJavaComponent.inject(ImageUpload::class.java)
 
@@ -91,5 +92,19 @@ fun Route.getPostInCLass(){
         }catch (e:Exception){
             call.respond(HttpStatusCode.BadRequest)
         }
+    }
+}
+
+fun Route.getPostById(){
+    get("post/{postId}"){
+        call.request.queryParameters["postId"]?.let{
+            call.respond(
+                BaseResponse(
+                    HttpStatusCode.OK.value,
+                    postRepository.getPostDetails(it)
+                )
+            )
+        }
+
     }
 }

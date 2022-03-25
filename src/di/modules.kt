@@ -22,7 +22,7 @@ val appModule = module(createdAtStart = true) {
     single { SchoolDao(get(),get()) }
     single { CommentDao(get()) }
     single { StudentDao() }
-    single { PostDao(get()) }
+    single { PostDao(get(),get()) }
     single { TeacherDao(get()) }
     single { ClassDao(get()) }
     single { UserDao() }

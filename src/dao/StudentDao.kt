@@ -53,24 +53,27 @@ class StudentDao(
         }
 
     private fun getListOfClasses(studentId: String) =
-        MemberClass
-            .select{(MemberClass.studentId.eq(studentId))}
-            .map {
-                it[MemberClass.classId]
-            }
-
-    fun  getStudentClasses(studentId: String,searchKey: String?) =
-        Classes.select(
-            Classes.id.inList(getListOfClasses(studentId)  ) and Classes.name.like("${searchKey ?: ""}%")
-        ).map {
-            ClassDto(
-                it[Classes.id],
-                it[Classes.name],
-                teacherDao.getTeacherById(it[Classes.teacherId])?.name ?: "",
-                it[Classes.stage]
-            )
+        transaction {
+            MemberClass
+                .select{(MemberClass.studentId.eq(studentId))}
+                .map {
+                    it[MemberClass.classId]
+                }
         }
 
+    fun  getStudentClasses(studentId: String,searchKey: String?) =
+        transaction{
+            Classes.select(
+                Classes.id.inList(getListOfClasses(studentId)) and Classes.name.like("${searchKey ?: ""}%")
+            ).map {
+                ClassDto(
+                    it[Classes.id],
+                    it[Classes.name],
+                    teacherDao.getTeacherById(it[Classes.teacherId])?.name ?: "",
+                    it[Classes.stage]
+                )
+            }
+        }
     //TODO LATER CHANGE RESPONSE
     fun getSchools(studentId: String) =
        transaction {

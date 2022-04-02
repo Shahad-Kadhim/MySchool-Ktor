@@ -2,9 +2,11 @@ package com.example.dao
 
 import com.example.authentication.Role
 import com.example.database.entities.*
+import com.example.models.ClassDto
 import com.example.models.SchoolDto
 import com.example.models.StudentDto
 import com.example.models.UserDto
+import com.example.util.toClass
 import com.example.util.toStudent
 import com.example.util.toUserDto
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -14,7 +16,9 @@ import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 
-class StudentDao {
+class StudentDao(
+    private val teacherDao: TeacherDao
+) {
 
     fun getAllStudents(): List<StudentDto> =
         transaction {
@@ -48,13 +52,25 @@ class StudentDao {
                 .select(Users.name.eq(name)).firstOrNull()?.toStudent()
         }
 
-    fun getStudentClasses(studentId: String) =
+    private fun getListOfClasses(studentId: String) =
         MemberClass
-            .slice(MemberClass.classId ,MemberClass.dateJoined)
             .select{(MemberClass.studentId.eq(studentId))}
             .map {
                 it[MemberClass.classId]
             }
+
+    fun  getStudentClasses(studentId: String,searchKey: String?) =
+        Classes.select(
+            Classes.id.inList(getListOfClasses(studentId)  ) and Classes.name.like("${searchKey ?: ""}%")
+        ).map {
+            ClassDto(
+                it[Classes.id],
+                it[Classes.name],
+                teacherDao.getTeacherById(it[Classes.teacherId])?.name ?: "",
+                it[Classes.stage]
+            )
+        }
+
     //TODO LATER CHANGE RESPONSE
     fun getSchools(studentId: String) =
        transaction {

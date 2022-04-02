@@ -110,6 +110,9 @@ fun Application.module(testing: Boolean = false) {
             getStudentInfo()
             getMangerInfo()
         }
+        authenticate("auth-student","auth-manger") {
+            getStudentClasses()
+        }
     }
 }
 

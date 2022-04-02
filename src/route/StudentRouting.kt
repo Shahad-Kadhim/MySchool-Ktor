@@ -27,14 +27,15 @@ fun Route.getAllStudent(){
     }
 }
 
-fun Route.getAllClass(){
+fun Route.getStudentClasses(){
     get("/student/classes"){
         call.principal<JWTPrincipal>()?.let {
             call.respond(
                 BaseResponse(
                     HttpStatusCode.OK.value,
                     studentRepository.getStudentClasses(
-                        it.payload.getClaim(JwtConfig.CLAIM_ID).asString()
+                        call.request.queryParameters["id"] ?: it.payload.getClaim(JwtConfig.CLAIM_ID).asString(),
+                        call.parameters["search"]
                     )
                 )
             )

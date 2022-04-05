@@ -53,7 +53,7 @@ fun Route.createPost(){
                     }
                 }
             }catch (e: Exception){
-                call.respond(e.message.toString())
+                call.respond(HttpStatusCode.BadRequest)
             }
         }
     }

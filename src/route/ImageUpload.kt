@@ -9,15 +9,19 @@ class ImageUpload(
     private val transloadit: Transloadit
 ) {
     fun uploadImage(parts: List<PartData>, onUploadImage:(String?) -> Unit) {
-        with(transloadit.newAssembly().addReSizeImage()){
-            extractImage(parts){
-                onUploadImage(
-                    it?.let { file ->
-                        addFile(file)
-                        save().id
-                    }
-                )
+        try {
+            with(transloadit.newAssembly().addReSizeImage()){
+                extractImage(parts){
+                    onUploadImage(
+                        it?.let { file ->
+                            addFile(file)
+                            save().id
+                        }
+                    )
+                }
             }
+        }catch (e: Exception){
+            throw e
         }
     }
 
@@ -32,22 +36,26 @@ class ImageUpload(
 
 
     private fun extractImage(parts: List<PartData>, onReceiveFile: (File?)-> Unit) {
-        with(parts.find { it.name == "image"} as? PartData.FileItem){
-            this?.originalFileName.let { name ->
-                when(name) {
-                    is String -> {
-                        onReceiveFile(
-                            File.createTempFile(
-                                name.substring(0,name.lastIndexOf(".")),
-                                name.substring(name.lastIndexOf("."))
-                            ).apply {
-                                writeBytes(this@with!!.streamProvider().readBytes())
-                            }
-                        )
+        try {
+            with(parts.find { it.name == "image"} as? PartData.FileItem){
+                this?.originalFileName.let { name ->
+                    when(name) {
+                        is String -> {
+                            onReceiveFile(
+                                File.createTempFile(
+                                    name.substring(0,name.lastIndexOf(".")),
+                                    name.substring(name.lastIndexOf("."))
+                                ).apply {
+                                    writeBytes(this@with!!.streamProvider().readBytes())
+                                }
+                            )
+                        }
+                        null -> onReceiveFile(name)
                     }
-                    null -> onReceiveFile(name)
                 }
             }
+        }catch (e: Exception){
+            throw  Exception("HERE IS PROBLEM AND IT ${e.message}")
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.example.di
 
 import com.example.dao.*
+import com.example.database.entities.DutyStudent
 import com.example.repostiory.*
 import com.example.route.ImageUpload
 import com.google.gson.Gson
@@ -16,6 +17,7 @@ val appModule = module(createdAtStart = true) {
     single { PostRepository(get()) }
     single { MangerRepository(get()) }
     single { ClassRepository(get()) }
+    single { DutyRepository(get()) }
     single { TeacherRepository(get())}
     single { SchoolRepository(get()) }
     single { CommentRepository(get()) }
@@ -26,6 +28,7 @@ val appModule = module(createdAtStart = true) {
     single { TeacherDao(get()) }
     single { ClassDao(get()) }
     single { UserDao() }
+    single { DutyStudentDao() }
     single { MangerDao(get(),get()) }
     single { Transloadit(System.getenv("TRANSLOADIT_AUTH_KEY"),System.getenv("TRANSLOADIT_SECRET_KEY")) }
     single { Gson() }

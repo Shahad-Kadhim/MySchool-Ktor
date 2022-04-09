@@ -62,6 +62,13 @@ fun ResultRow.toSchool() = School(
     mangerId = this[Schools.mangerId]
 )
 
+fun ResultRow.toDutySubmit() =
+    DutySubmit(
+        studentId = this[DutyStudent.studentId],
+        dutyId = this[DutyStudent.dutyId],
+        submitDate = this[DutyStudent.submitDate],
+        solutionLink = this[DutyStudent.solutionLink],
+    )
 fun Classes.insertClass(nClass:Class){
     this.insert {
         it[id] = nClass.id
@@ -226,6 +233,14 @@ fun Posts.insertPost(post: Post){
         it[datePosted] = post.datePosted
         it[authorId] = post.authorId
         it[type] = post.type.name
+    }
+}
+fun DutyStudent.insertDutySolution(dutySubmit: DutySubmit){
+    this.insert {
+        it[studentId] =dutySubmit.studentId
+        it[dutyId] =dutySubmit.dutyId
+        it[submitDate] =dutySubmit.submitDate
+        it[solutionLink] =dutySubmit.solutionLink
     }
 }
 

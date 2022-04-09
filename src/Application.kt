@@ -39,11 +39,11 @@ fun Application.module(testing: Boolean = false) {
         SchemaUtils.drop(
 //            TeachersSchool,
 //            MemberClass,
-//            DutyStudent,
+            DutyStudent,
 //            Duties,
 //            Students,
 //            Lesson,
-            Comments,
+//            Comments,
 //            Posts,
 //            Classes,
 //            Teachers ,
@@ -113,6 +113,9 @@ fun Application.module(testing: Boolean = false) {
         authenticate("auth-student","auth-manger") {
             getStudentClasses()
         }
+        authenticate("auth-student","auth-teacher") {
+            getSolution()
+        }
     }
 }
 
@@ -128,6 +131,7 @@ fun Routing.testRoute() {
 fun Routing.student() {
     authenticate("auth-student") {
         getStudentSchool()
+        addSolution()
     }
 }
 
@@ -139,6 +143,7 @@ fun Routing.teacher() {
         removeStudentFromClass()
         getStudentInSchool()
         createPost()
+        getSolutionsForDuty()
     }
 }
 

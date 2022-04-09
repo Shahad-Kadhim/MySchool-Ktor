@@ -39,11 +39,11 @@ fun Application.module(testing: Boolean = false) {
         SchemaUtils.drop(
 //            TeachersSchool,
 //            MemberClass,
-            DutyStudent,
+//            DutyStudent,
 //            Duties,
 //            Students,
 //            Lesson,
-//            Comments,
+            Comments,
 //            Posts,
 //            Classes,
 //            Teachers ,

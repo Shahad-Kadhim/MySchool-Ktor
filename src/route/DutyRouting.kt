@@ -22,6 +22,7 @@ import java.util.*
 private val dutyRepository: DutyRepository by KoinJavaComponent.inject(DutyRepository::class.java)
 private  val gson: Gson by KoinJavaComponent.inject(Gson::class.java)
 private val imageUpload: ImageUpload by KoinJavaComponent.inject(ImageUpload::class.java)
+private val loadImage: LoadImage by KoinJavaComponent.inject(LoadImage::class.java)
 
 fun Route.addSolution(){
     post("duty/{dutyId}/addSolution") {
@@ -78,15 +79,21 @@ fun Route.getSolution(){
         call.principal<JWTPrincipal>()?.let { jwt ->
             try {
                 call.request.queryParameters["dutyId"]?.let { dutyId ->
-                    call.respond(
-                        BaseResponse(
-                            HttpStatusCode.OK.value,
-                            dutyRepository.getSolution(
-                                dutyId,
-                                call.request.queryParameters["studentId"] ?: jwt.payload.getClaim(JwtConfig.CLAIM_ID).asString() ,
+                    dutyRepository.getSolution(
+                        dutyId,
+                        call.request.queryParameters["studentId"] ?: jwt.payload.getClaim(JwtConfig.CLAIM_ID).asString() ,
+                    ).apply {
+                        this?.let {
+                            this.solutionLink = loadImage.getImageUrl(this.solutionLink)
+                        }
+                        call.respond(
+                            BaseResponse(
+                                HttpStatusCode.OK.value,
+                                this
                             )
                         )
-                    )
+
+                    }
                 }
             } catch (e: Exception) {
                 call.respond(HttpStatusCode.BadRequest)

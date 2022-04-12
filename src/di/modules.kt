@@ -34,5 +34,5 @@ val appModule = module(createdAtStart = true) {
     single { Transloadit(System.getenv("TRANSLOADIT_AUTH_KEY"),System.getenv("TRANSLOADIT_SECRET_KEY")) }
     single { Gson() }
     single { ImageUpload(get()) }
-    single { LoadImage(get()) }
+    single { LoadImage(get(),get()) }
 }

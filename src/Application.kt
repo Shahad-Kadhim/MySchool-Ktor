@@ -43,7 +43,7 @@ fun Application.module(testing: Boolean = false) {
 //            Duties,
 //            Students,
 //            Lesson,
-            Comments,
+//            Comments,
 //            Posts,
 //            Classes,
 //            Teachers ,

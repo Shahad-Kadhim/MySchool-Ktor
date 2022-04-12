@@ -8,6 +8,7 @@ import com.example.repostiory.DutyRepository
 import com.example.requestBody.CreatePostBody
 import com.example.util.toPostType
 import com.google.gson.Gson
+import com.mysql.cj.log.Log
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.auth.jwt.*
@@ -96,7 +97,8 @@ fun Route.getSolution(){
                     }
                 }
             } catch (e: Exception) {
-                call.respond(HttpStatusCode.BadRequest)
+                print(e.message)
+                call.respond("${e.message}")
             }
         }
     }

@@ -3,12 +3,7 @@ package com.example.route
 import com.example.authentication.JwtConfig
 import com.example.models.BaseResponse
 import com.example.models.DutySubmit
-import com.example.models.Post
 import com.example.repostiory.DutyRepository
-import com.example.requestBody.CreatePostBody
-import com.example.util.toPostType
-import com.google.gson.Gson
-import com.mysql.cj.log.Log
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.auth.jwt.*
@@ -21,7 +16,6 @@ import org.koin.java.KoinJavaComponent
 import java.util.*
 
 private val dutyRepository: DutyRepository by KoinJavaComponent.inject(DutyRepository::class.java)
-private  val gson: Gson by KoinJavaComponent.inject(Gson::class.java)
 private val imageUpload: ImageUpload by KoinJavaComponent.inject(ImageUpload::class.java)
 private val loadImage: LoadImage by KoinJavaComponent.inject(LoadImage::class.java)
 
@@ -37,7 +31,8 @@ fun Route.addSolution(){
                                     studentId = jwt.payload.getClaim(JwtConfig.CLAIM_ID).asString(),
                                     dutyId = it,
                                     submitDate = Date().time,
-                                    solutionLink = imageId!!
+                                    solutionLink = imageId!!,
+                                    "" //TODO LATER :)
                                 )
                             )
                         }
@@ -58,15 +53,21 @@ fun Route.addSolution(){
 
 fun Route.getSolutionsForDuty(){
     get("duty/getSolutions") {
-        call.principal<JWTPrincipal>()?.let { jwt ->
+        call.principal<JWTPrincipal>()?.let {
             try {
                 call.request.queryParameters["dutyId"]?.let { dutyId ->
-                    call.respond(
-                        BaseResponse(
-                            HttpStatusCode.OK.value,
-                            dutyRepository.getSolutionsForDuty(dutyId)
-                        )
-                    )
+                    dutyRepository.getSolutionsForDuty(dutyId)
+                        .apply {
+                            forEach {
+                            it.solutionLink = loadImage.getImageUrl(it.solutionLink)
+                            }
+                            call.respond(
+                                BaseResponse(
+                                    HttpStatusCode.OK.value,
+                                    this
+                                )
+                            )
+                        }
                 }
             } catch (e: Exception) {
                 call.respond(HttpStatusCode.BadRequest)

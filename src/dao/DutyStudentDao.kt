@@ -10,7 +10,9 @@ import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 
-class DutyStudentDao() {
+class DutyStudentDao(
+    private val userDao: UserDao
+) {
     fun addSolution(dutySubmit: DutySubmit) {
         transaction {
             DutyStudent.insertDutySolution(dutySubmit)
@@ -21,7 +23,9 @@ class DutyStudentDao() {
         transaction {
             DutyStudent.select(DutyStudent.dutyId.eq(dutyId))
                 .map{
-                    it.toDutySubmit()
+                    it.toDutySubmit(
+                        userDao.findUserById(it[DutyStudent.studentId])?.name ?: ""
+                    )
                 }
         }
 
@@ -30,7 +34,9 @@ class DutyStudentDao() {
             DutyStudent.select(
                 DutyStudent.dutyId.eq(dutyId) and
                         DutyStudent.studentId.eq(studentId)
-            ).firstOrNull()?.toDutySubmit()
+            ).firstOrNull()?.toDutySubmit(
+                userDao.findUserById(studentId)?.name ?: ""
+            )
         }
 
 

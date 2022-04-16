@@ -62,12 +62,13 @@ fun ResultRow.toSchool() = School(
     mangerId = this[Schools.mangerId]
 )
 
-fun ResultRow.toDutySubmit() =
+fun ResultRow.toDutySubmit(studentName: String) =
     DutySubmit(
         studentId = this[DutyStudent.studentId],
         dutyId = this[DutyStudent.dutyId],
         submitDate = this[DutyStudent.submitDate],
         solutionLink = this[DutyStudent.solutionLink],
+        studentName = studentName
     )
 fun Classes.insertClass(nClass:Class){
     this.insert {

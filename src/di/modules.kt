@@ -29,7 +29,7 @@ val appModule = module(createdAtStart = true) {
     single { TeacherDao(get()) }
     single { ClassDao(get()) }
     single { UserDao() }
-    single { DutyStudentDao() }
+    single { DutyStudentDao(get()) }
     single { MangerDao(get(),get()) }
     single { Transloadit(System.getenv("TRANSLOADIT_AUTH_KEY"),System.getenv("TRANSLOADIT_SECRET_KEY")) }
     single { Gson() }

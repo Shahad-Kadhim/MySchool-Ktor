@@ -59,7 +59,7 @@ fun Route.getSolutionsForDuty(){
                     dutyRepository.getSolutionsForDuty(dutyId)
                         .apply {
                             forEach {
-                            it.solutionLink = loadImage.getImageUrl(it.solutionLink)
+                                it.solutionLink = loadImage.getImageUrl(it.solutionLink)
                             }
                             call.respond(
                                 BaseResponse(

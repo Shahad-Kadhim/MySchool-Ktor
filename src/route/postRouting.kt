@@ -77,6 +77,25 @@ fun Route.getLessonInCLass(){
     }
 }
 
+fun Route.getTeacherDuties(){
+    get("teacher/getDuties"){
+        call.principal<JWTPrincipal>()?.let { jwt ->
+            try {
+                call.respond(
+                    BaseResponse(
+                        HttpStatusCode.OK.value,
+                        postRepository.getTeacherDuties(
+                            call.parameters["teacherId"] ?: jwt.payload.getClaim(JwtConfig.CLAIM_ID).asString()
+                        )
+                    )
+                )
+            }catch (e:Exception){
+                call.respond(HttpStatusCode.BadRequest)
+            }
+        }
+    }
+}
+
 fun Route.getPostInCLass(){
     get("post/getPost"){
         try {

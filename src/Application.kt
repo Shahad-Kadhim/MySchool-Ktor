@@ -116,6 +116,9 @@ fun Application.module(testing: Boolean = false) {
         authenticate("auth-student","auth-teacher") {
             getSolution()
         }
+        authenticate("auth-manger","auth-teacher") {
+            getTeacherDuties()
+        }
     }
 }
 

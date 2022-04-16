@@ -16,7 +16,7 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class PostDao(
-    private val teacherDao: TeacherDao,
+    private val userDao: UserDao,
     private val commentDao: CommentDao
 ) {
 
@@ -38,7 +38,7 @@ class PostDao(
         transaction {
             Posts.select(Posts.classId.eq(classId))
                 .map {
-                    it.toPostDto(teacherDao.getTeacherById(it[Posts.authorId])?.name ?: "")
+                    it.toPostDto(userDao.findUserById(it[Posts.authorId])?.name ?: "")
                 }
         }
 
@@ -47,7 +47,7 @@ class PostDao(
             (Lesson innerJoin Posts)
                 .select(Posts.classId.eq(classId) and Posts.type.eq(PostType.LESSON.name))
                 .map {
-                    it.toLessonDto(teacherDao.getTeacherById(it[Posts.authorId])?.name ?: "")
+                    it.toLessonDto(userDao.findUserById(it[Posts.authorId])?.name ?: "")
                 }
         }
 
@@ -56,12 +56,20 @@ class PostDao(
             Posts.select(Posts.id.eq(postId))
                 .map {
                     it.toPostDetailsDto(
-                        teacherDao.getTeacherById(it[Posts.authorId])?.name ?: "",
+                        userDao.findUserById(it[Posts.authorId])?.name ?: "",
                         commentDao.getCommentsInPost(postId)
                         )
                 }.firstOrNull()
         }
 
+    fun getTeacherDuties(teacherId: String) =
+        transaction {
+            (Duties innerJoin Posts)
+                .select(Posts.authorId.eq(teacherId) and Posts.type.eq(PostType.DUTY.name))
+                .map {
+                    it.toDutyDto(userDao.findUserById(teacherId)?.name ?: "")
+                }
+        }
 
 
 }

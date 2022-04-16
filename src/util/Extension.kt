@@ -1,6 +1,7 @@
 package com.example.util
 
 import com.example.authentication.Role
+import com.example.com.example.models.DutyDto
 import com.example.dao.toRole
 import com.example.database.PostType
 import com.example.database.entities.*
@@ -187,6 +188,17 @@ fun ResultRow.toLessonDto(authorName: String)=
         authorName,
         this[Posts.datePosted],
         this[Lesson.lastDateUpdated]
+    )
+
+fun ResultRow.toDutyDto(authorName: String)=
+    DutyDto(
+        this[Posts.id],
+        this[Posts.title],
+        this[Posts.content],
+        this[Posts.payload],
+        authorName,
+        this[Posts.datePosted],
+        this[Duties.degree]
     )
 
 fun String.toPostType(): PostType =

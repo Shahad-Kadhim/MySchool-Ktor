@@ -72,3 +72,19 @@ fun Route.getStudentSchool(){
         }
     }
 }
+
+
+fun Route.getStudentAssignments(){
+    get("/student/assignments"){
+        call.principal<JWTPrincipal>()?.let {
+            call.respond(
+                BaseResponse(
+                    HttpStatusCode.OK.value,
+                    studentRepository.getStudentAssignments(
+                        it.payload.getClaim(JwtConfig.CLAIM_ID).asString(),
+                    )
+                )
+            )
+        }
+    }
+}

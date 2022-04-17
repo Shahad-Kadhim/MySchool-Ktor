@@ -24,7 +24,7 @@ val appModule = module(createdAtStart = true) {
     single { CommentRepository(get()) }
     single { SchoolDao(get(),get()) }
     single { CommentDao(get()) }
-    single { StudentDao(get()) }
+    single { StudentDao(get(),get()) }
     single { PostDao(get(),get()) }
     single { TeacherDao(get()) }
     single { ClassDao(get()) }

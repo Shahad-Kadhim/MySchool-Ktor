@@ -135,6 +135,7 @@ fun Routing.student() {
     authenticate("auth-student") {
         getStudentSchool()
         addSolution()
+        getStudentAssignments()
     }
 }
 

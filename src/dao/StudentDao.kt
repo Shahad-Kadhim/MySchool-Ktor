@@ -1,12 +1,14 @@
 package com.example.dao
 
 import com.example.authentication.Role
+import com.example.database.PostType
 import com.example.database.entities.*
 import com.example.models.ClassDto
 import com.example.models.SchoolDto
 import com.example.models.StudentDto
 import com.example.models.UserDto
 import com.example.util.toClass
+import com.example.util.toDutyDto
 import com.example.util.toStudent
 import com.example.util.toUserDto
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -17,7 +19,8 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class StudentDao(
-    private val teacherDao: TeacherDao
+    private val teacherDao: TeacherDao,
+    private val userDao: UserDao
 ) {
 
     fun getAllStudents(): List<StudentDto> =
@@ -88,4 +91,12 @@ class StudentDao(
                 }
         }
 
-}
+    fun getAssignmentForStudent(studentId: String) =
+        transaction{
+            (Duties innerJoin Posts)
+                .select(Posts.classId.inList(getListOfClasses(studentId)) and Posts.type.eq(PostType.DUTY.name))
+                .map {
+                    it.toDutyDto(userDao.findUserById(it[Posts.authorId])?.name ?: "")
+                }
+        }
+    }

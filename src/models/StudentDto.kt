@@ -8,5 +8,6 @@ data class StudentDto (
     var age: Int,
     var note: String,
     var phone: Long ,
-    var stage: Int
+    var stage: Int,
+    var firebaseToken: String
 )

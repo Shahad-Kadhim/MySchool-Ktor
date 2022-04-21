@@ -24,7 +24,7 @@ class NotificationDao {
         NotificationUser.addNotifications(notificationId,users)
     }
 
-    fun getNotifications(userId: String){
+    fun getNotifications(userId: String) =
         transaction {
             Notifications.select(
                 Notifications.id.inList(getNotificationsId(userId))
@@ -32,7 +32,7 @@ class NotificationDao {
                 it.toNotification()
             }
         }
-    }
+
 
     private fun getNotificationsId(userId: String): List<String> =
         transaction{

@@ -18,7 +18,8 @@ fun ResultRow.toStudent() = StudentDto(
     age = this[Students.age],
     note = this[Students.note],
     phone = this[Users.phone],
-    stage = this[Students.stage]
+    stage = this[Students.stage],
+    firebaseToken = this[Users.firebaseToken]
 )
 
 fun ResultRow.toUserDto() = UserDto(

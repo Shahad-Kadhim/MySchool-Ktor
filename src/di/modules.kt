@@ -1,13 +1,11 @@
 package com.example.di
 
 import com.example.dao.*
-import com.example.database.entities.DutyStudent
 import com.example.repostiory.*
 import com.example.route.ImageUpload
 import com.example.route.LoadImage
 import com.google.gson.Gson
 import com.transloadit.sdk.Transloadit
-import org.koin.core.scope.get
 import org.koin.dsl.module
 
 
@@ -22,12 +20,12 @@ val appModule = module(createdAtStart = true) {
     single { TeacherRepository(get())}
     single { SchoolRepository(get()) }
     single { CommentRepository(get()) }
-    single { SchoolDao(get(),get()) }
-    single { CommentDao(get()) }
+    single { SchoolDao(get(),get(),get()) }
+    single { CommentDao(get(),get()) }
     single { StudentDao(get(),get()) }
-    single { PostDao(get(),get()) }
+    single { PostDao(get(),get(),get(),get()) }
     single { TeacherDao(get()) }
-    single { ClassDao(get()) }
+    single { ClassDao(get(),get(),get(),get()) }
     single { UserDao() }
     single { DutyStudentDao(get()) }
     single { MangerDao(get(),get()) }
@@ -35,4 +33,6 @@ val appModule = module(createdAtStart = true) {
     single { Gson() }
     single { ImageUpload(get()) }
     single { LoadImage(get(),get()) }
+    single { NotificationDao() }
+    single { NotificationRepository(get()) }
 }

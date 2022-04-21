@@ -9,4 +9,5 @@ data class Teacher(
     var password: String,
     var teachingSpecialization: String,
     var phone: Long,
+    var firebaseToken: String
 )

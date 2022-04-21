@@ -37,19 +37,22 @@ fun Application.module(testing: Boolean = false) {
     DatabaseManager().getDatabase()
     transaction {
         SchemaUtils.drop(
-//            TeachersSchool,
-//            MemberClass,
-//            DutyStudent,
-//            Duties,
-//            Students,
-//            Lesson,
-//            Comments,
-//            Posts,
-//            Classes,
-//            Teachers ,
-//            Schools,
-//            Mangers,
-//            Users,
+            TeachersSchool,
+            MemberClass,
+            DutyStudent,
+            Duties,
+            StudentsSchool,
+            Students,
+            Lesson,
+            Comments,
+            Posts,
+            Classes,
+            Teachers ,
+            Schools,
+            Mangers,
+//            NotificationUser,
+//            Notifications,
+            Users,
         )
         SchemaUtils.create(
             Roles,
@@ -66,7 +69,9 @@ fun Application.module(testing: Boolean = false) {
             DutyStudent,
             MemberClass,
             TeachersSchool,
-            StudentsSchool
+            StudentsSchool,
+            Notifications,
+            NotificationUser
             )
     }
 
@@ -109,6 +114,7 @@ fun Application.module(testing: Boolean = false) {
             getTeacherInfo()
             getStudentInfo()
             getMangerInfo()
+            getNotification()
         }
         authenticate("auth-student","auth-manger") {
             getStudentClasses()

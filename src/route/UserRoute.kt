@@ -35,7 +35,8 @@ fun Route.addUser(){
                             phone = phone,
                             age = age,
                             stage = stage,
-                            note = note
+                            note = note,
+                            firebaseToken = firebaseToken
                         )
                     }
 
@@ -58,7 +59,8 @@ fun Route.addUser(){
                             name = name,
                             password = hash(password),
                             phone = phone,
-                            teachingSpecialization = teachingSpecialization
+                            teachingSpecialization = teachingSpecialization,
+                            firebaseToken = firebaseToken
                         )
                     }
 
@@ -81,6 +83,7 @@ fun Route.addUser(){
                             name = name,
                             password = hash(password),
                             phone = phone,
+                            firebaseToken =firebaseToken
                         )
                     }
                     println(manger.toString())
@@ -109,7 +112,7 @@ fun Route.loginUser(){
     post("/user/login") {
         try {
             val user = call.receive<LoginBody>()
-            userRepository.loginUser(user.name, hash(user.password))?.let {
+            userRepository.loginUser(user.name, hash(user.password),user.firebaseToken)?.let {
                call.respond(
                    BaseResponse(
                        HttpStatusCode.Found.value,

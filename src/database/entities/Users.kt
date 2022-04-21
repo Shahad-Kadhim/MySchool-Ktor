@@ -8,9 +8,8 @@ object Users: Table("users") {
     val password =text("password")
     val phone = long("phone")
     val role = varchar("role",10) references Roles.role
-
+    val firebaseToken = text("firebase_token")
     init {
         index(true,name)
     }
-
 }

@@ -1,4 +1,4 @@
-package com.example.com.example.models
+package com.example.models
 
 data class DutyDto(
     val id: String,

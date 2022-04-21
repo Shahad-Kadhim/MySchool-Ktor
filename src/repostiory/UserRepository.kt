@@ -17,8 +17,8 @@ class UserRepository(
     fun addStudentUser(student: Student) =
         userDao.addUserStudent(student)
 
-    fun loginUser(name: String, password: String) =
-        userDao.findUserByNameAndPassword(name, password)
+    fun loginUser(name: String, password: String, firebaseToken: String) =
+        userDao.findUserByNameAndPassword(name, password,firebaseToken)
 
     fun addRole(role: String) =
         userDao.addRole(role)

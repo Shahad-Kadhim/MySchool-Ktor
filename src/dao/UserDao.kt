@@ -20,20 +20,24 @@ class UserDao {
             }.firstOrNull()
         }
 
-    fun findUserByNameAndPassword(name: String, password: String): User? =
+    fun findUserByNameAndPassword(name: String, password: String,firebaseToken: String): User? =
         transaction{
             Users.select(
                 Users.name.eq(name) and
                         Users.password.eq(password)
             ).map {
                 it.toUser()
-            }.firstOrNull()
+            }.firstOrNull()?.also {
+                Users.update({ Users.id eq it.id }){
+                    it[Users.firebaseToken] = firebaseToken
+                }
+            }
         }
 
 
     fun addUserTeacher(teacher: Teacher){
         transaction{
-            Users.insertUser(User(teacher.id,teacher.name,teacher.password,teacher.phone, Role.TEACHER))
+            Users.insertUser(User(teacher.id,teacher.name,teacher.password,teacher.phone, Role.TEACHER,teacher.firebaseToken))
         }
         transaction {
             Teachers.insertTeacher(teacher)
@@ -48,7 +52,8 @@ class UserDao {
                     manger.name,
                     manger.password,
                     manger.phone,
-                    Role.MANGER
+                    Role.MANGER,
+                    manger.firebaseToken
                 )
             )
             Mangers.insertManger(manger)
@@ -58,7 +63,7 @@ class UserDao {
     fun addUserStudent(student: Student){
         println(student.toString())
         transaction{
-            Users.insertUser(User(student.id,student.name,student.password,student.phone, Role.STUDENT))
+            Users.insertUser(User(student.id,student.name,student.password,student.phone, Role.STUDENT, student.firebaseToken))
         }
         transaction {
             Students.insertStudent(student)

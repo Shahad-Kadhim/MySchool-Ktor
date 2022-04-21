@@ -1,10 +1,11 @@
 package com.example.util
 
 import com.example.authentication.Role
-import com.example.com.example.models.DutyDto
+import com.example.models.DutyDto
 import com.example.dao.toRole
 import com.example.database.PostType
 import com.example.database.entities.*
+import com.example.database.entities.Notifications
 import com.example.models.*
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.batchInsert
@@ -33,6 +34,7 @@ fun ResultRow.toTeacher() = Teacher(
     password = this[Users.password],
     teachingSpecialization = this[Teachers.teachingSpecialization],
     phone = this[Users.phone],
+    firebaseToken = this[Users.firebaseToken],
 )
 
 fun ResultRow.toTeacherList() = TeacherList(
@@ -54,7 +56,8 @@ fun ResultRow.toManger() = Manger(
     id=this[Mangers.id],
     name = this[Users.name],
     password = this[Users.password],
-    phone = this[Users.phone]
+    phone = this[Users.phone],
+    firebaseToken = this[Users.firebaseToken],
 )
 
 fun ResultRow.toSchool() = School(
@@ -145,8 +148,25 @@ fun Users.insertUser(user: User){
         it[password] = user.password
         it[phone] = user.phone
         it[role] = user.role.name
+        it[firebaseToken] = user.firebaseToken
     }
 }
+
+fun NotificationUser.addNotifications(notificationsId: String, users: List<String>){
+    this.batchInsert(users){ item ->
+        this[notificationId] = notificationsId
+        this[userId] = item
+    }
+}
+fun Notifications.insertNotification(notification: Notification){
+    this.insert{
+        it[id] = notification.id
+        it[title] = notification.title
+        it[content] = notification.content
+        it[date] = notification.date
+    }
+}
+
 fun ResultRow.toUser()=
     User(
         this[Users.id],
@@ -154,6 +174,7 @@ fun ResultRow.toUser()=
         this[Users.password],
         this[Users.phone],
         this[Users.role].toRole(),
+        this[Users.firebaseToken]
     )
 
 fun ResultRow.toPostDto(authorName: String)=
@@ -215,6 +236,14 @@ fun ResultRow.toCommentDto(authorName: String?) =
         content = this[Comments.content],
         postId = this[Comments.postId],
         dateCommented = this[Comments.dateCommented]
+    )
+
+fun ResultRow.toNotification(): Notification =
+    Notification(
+        id= this[Notifications.id],
+        title= this[Notifications.title],
+        content= this[Notifications.content],
+        date= this[Notifications.date]
     )
 
 fun String.toRole(): Role?=

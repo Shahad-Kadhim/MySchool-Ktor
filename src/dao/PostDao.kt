@@ -4,27 +4,45 @@ import com.example.database.PostType
 import com.example.database.entities.Duties
 import com.example.database.entities.Lesson
 import com.example.database.entities.Posts
-import com.example.models.LessonDto
-import com.example.models.Post
-import com.example.models.PostDetailsDto
-import com.example.models.PostDto
+import com.example.models.*
 import com.example.util.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
+import java.util.*
 
 class PostDao(
     private val userDao: UserDao,
-    private val commentDao: CommentDao
+    private val commentDao: CommentDao,
+    private val classDao: ClassDao,
+    private val notificationDao: NotificationDao
 ) {
 
     fun createPost(post: Post){
         transaction {
             Posts.insertPost(post)
             insertByType(post.id,post.type)
+            createNotificationToPublishPost(
+                classDao.getStudentInClass(post.classId).map { it.id },
+                post
+            )
+
         }
+    }
+
+
+    private fun createNotificationToPublishPost(users: List<String>,post: Post){
+        notificationDao.createNotification(
+            Notification(
+                id = UUID.randomUUID().toString(),
+                title = "New Post in ${classDao.getClassById(post.classId)?.name} class",
+                content = "${userDao.findUserById(post.authorId)} publish new Post ",
+                date = Date().time
+            ),
+            users
+        )
     }
 
     private fun insertByType(id: String, type: PostType) {
@@ -71,5 +89,7 @@ class PostDao(
                 }
         }
 
-
+    fun getPostAuthor(postId: String) =
+        transaction {
+        }
 }

@@ -2,6 +2,7 @@ package com.example.dao
 
 import com.example.database.entities.*
 import com.example.models.Class
+import com.example.models.Notification
 import com.example.models.UserDto
 import com.example.util.insertClass
 import com.example.util.joinStudent
@@ -13,9 +14,13 @@ import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+import java.util.*
 
 class ClassDao(
     private val studentDao: StudentDao,
+    private val notificationDao: NotificationDao,
+    private val schoolDao: SchoolDao,
+    private val userDao: UserDao
 ) {
 
     fun getAllClasses(): List<Class> =
@@ -35,7 +40,22 @@ class ClassDao(
     fun createClass(classI: Class) =
         transaction {
             Classes.insertClass(classI)
+            createNotificationToCreateClass(classI)
         }
+
+    private fun createNotificationToCreateClass(classI: Class){
+        schoolDao.getSchoolById(classI.schoolId)?.let {
+            notificationDao.createNotification(
+                Notification(
+                    id = UUID.randomUUID().toString(),
+                    title = "New class created",
+                    content = "the ${userDao.findUserById(classI.teacherId)?.name} create ${classI.name}",
+                    date = Date().time
+                ),
+                listOf(it.mangerId)
+            )
+        }
+    }
 
     fun deleteClass(classId: String) =
         transaction{
@@ -62,7 +82,22 @@ class ClassDao(
     fun addStudentsInClass(studentsId :List<String>,classId: String) =
         transaction {
             MemberClass.joinStudent(studentsId,classId)
+            getClassById(classId)?.let {
+                createNotificationToJoinToCLass(studentsId, it)
+            }
         }
+
+    private fun createNotificationToJoinToCLass(studentsId: List<String>, classI: Class){
+        notificationDao.createNotification(
+            Notification(
+                id = UUID.randomUUID().toString(),
+                title = "You Joined To New Class",
+                content = "the ${userDao.findUserById(classI.teacherId)} add You to ${classI.name}",
+                date = Date().time
+            ),
+            studentsId
+        )
+    }
 
     fun removeStudentFromClass(studentId: List<String>, classId: String){
         transaction {
@@ -85,4 +120,5 @@ class ClassDao(
                 null
             )
         }
+
 }

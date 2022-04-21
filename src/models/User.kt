@@ -8,5 +8,6 @@ data class User(
     val name: String,
     val password: String,
     val phone: Long,
-    val role: Role
+    val role: Role,
+    var firebaseToken: String
 )

@@ -7,5 +7,6 @@ data class Manger(
     val id: String ,
     var name :String ,
     var password: String,
-    val phone: Long
+    val phone: Long,
+    var firebaseToken: String,
 )

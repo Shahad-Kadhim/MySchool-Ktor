@@ -1,16 +1,20 @@
 package com.example.dao
 
 import com.example.database.entities.*
+import com.example.models.Notification
 import com.example.models.School
 import com.example.models.UserDto
 import com.example.util.*
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
+import java.util.*
+import java.util.Date
 
 class SchoolDao(
     private val studentDao: StudentDao,
-    private val teacherDao: TeacherDao
+    private val teacherDao: TeacherDao,
+    private val notificationDao: NotificationDao
 ) {
 
     fun getAllSchools(): List<School> =
@@ -38,11 +42,11 @@ class SchoolDao(
             Schools.deleteWhere { (Schools.id.eq(schoolId)) }
         }
 
-    fun getClassesInSchool(SchoolId: String) =
+    fun getClassesInSchool(schoolId: String) =
         transaction {
             (Schools innerJoin Classes)
                 .slice(Classes.id)
-                .select { (Schools.id.eq(Classes.schoolId)) }
+                .select { (Classes.schoolId.eq(schoolId))}
                 .map{
                     it[Classes.id]
                 }
@@ -71,6 +75,7 @@ class SchoolDao(
         transaction{
             teacherDao.getTeacherByName(teacherName)?.let { teacher ->
                 TeachersSchool.joinTeacher(schoolId, teacher)
+                createNotificationToJoinSchool(teacher.id)
                 return@transaction true
             }
             return@transaction null
@@ -81,6 +86,8 @@ class SchoolDao(
         transaction {
             TeachersSchool.deleteWhere {
                 ( TeachersSchool.teacherId.inList(teacherId) and TeachersSchool.schoolId.eq(schoolId) )
+            }.takeIf { it >0  }?.let {
+                createNotificationToRemoveFromSchool(teacherId)
             }
         }
 
@@ -103,21 +110,47 @@ class SchoolDao(
         transaction{
             studentDao.getStudentByName(studentName)?.let { student ->
                 StudentsSchool.joinStudent(schoolId, student)
+                createNotificationToJoinSchool(student.id)
                 return@transaction true
             }
             return@transaction null
         }
 
 
+    private fun createNotificationToJoinSchool(userId: String){
+        notificationDao.createNotification(
+            Notification(
+                id = UUID.randomUUID().toString(),
+                title = "You join to New School",
+                content = "the manger add you to school",
+                date = Date().time
+            ),
+            listOf(userId)
+        )
+    }
+
+    private fun createNotificationToRemoveFromSchool(users: List<String>){
+        notificationDao.createNotification(
+            Notification(
+                id = UUID.randomUUID().toString(),
+                title = "You Remove From your School",
+                content = "the manger remove you from school",
+                date = Date().time
+            ),
+            users
+        )
+    }
 
     fun removeStudentFromSchool(studentId: List<String>, schoolId: String) =
         transaction {
             StudentsSchool.deleteWhere {
                 ( StudentsSchool.studentId.inList(studentId) and StudentsSchool.schoolId.eq(schoolId) )
+            }.takeIf { it >0 }?.let {
+                createNotificationToRemoveFromSchool(studentId)
             }
         }
 
-    fun getStudents(schoolId: String,searchKey: String?): List<UserDto> =
+    fun getStudents(schoolId: String,searchKey: String?=null): List<UserDto> =
         transaction {
             studentDao.getAllStudents(getStudentInSchool(schoolId),searchKey)
         }

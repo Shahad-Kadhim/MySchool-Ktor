@@ -39,6 +39,7 @@ fun Application.module(testing: Boolean = false) {
         SchemaUtils.drop(
             TeachersSchool,
             MemberClass,
+            MemberClasss,
             DutyStudent,
             Duties,
             StudentsSchool,

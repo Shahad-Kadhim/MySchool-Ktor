@@ -9,6 +9,7 @@ import com.example.models.User
 import com.example.util.*
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class UserDao {
@@ -106,6 +107,14 @@ class UserDao {
                 .map {
                     it.toStudent()
                 }.firstOrNull()
+        }
+
+    fun getFirebaseToken(users: List<String>): List<String> =
+        transaction {
+            Users.select(Users.id.inList(users))
+                .map {
+                    it[Users.firebaseToken]
+                }
         }
 
 

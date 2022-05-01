@@ -38,7 +38,7 @@ class PostDao(
             Notification(
                 id = UUID.randomUUID().toString(),
                 title = "New Post in ${classDao.getClassById(post.classId)?.name} class",
-                content = "${userDao.findUserById(post.authorId)} publish new Post ",
+                content = "${userDao.findUserById(post.authorId)?.name} publish new Post ",
                 date = Date().time
             ),
             users

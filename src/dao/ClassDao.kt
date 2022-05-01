@@ -92,7 +92,7 @@ class ClassDao(
             Notification(
                 id = UUID.randomUUID().toString(),
                 title = "You Joined To New Class",
-                content = "the ${userDao.findUserById(classI.teacherId)} add You to ${classI.name}",
+                content = "the ${userDao.findUserById(classI.teacherId)?.name} add You to ${classI.name}",
                 date = Date().time
             ),
             studentsId

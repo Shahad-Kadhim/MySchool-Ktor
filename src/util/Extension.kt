@@ -7,10 +7,9 @@ import com.example.database.PostType
 import com.example.database.entities.*
 import com.example.database.entities.Notifications
 import com.example.models.*
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.batchInsert
-import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.*
 import java.util.*
+import java.util.Date
 
 fun ResultRow.toStudent() = StudentDto(
     id=this[Students.id],
@@ -309,3 +308,14 @@ fun Comments.insertComment(comment: Comment){
         it[dateCommented] = comment.dateCommented
     }
 }
+
+fun IntRange.toLongList() =
+    this.toList().map { it.toLong() }
+
+fun Date.getRangeOfLastWeak(): LongRange =
+    Calendar.getInstance().apply {
+        time = this@getRangeOfLastWeak
+        add(Calendar.DAY_OF_WEEK,-7)
+    }.time.time..this@getRangeOfLastWeak.time
+
+

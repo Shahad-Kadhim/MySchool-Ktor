@@ -7,16 +7,14 @@ import com.example.models.ClassDto
 import com.example.models.SchoolDto
 import com.example.models.StudentDto
 import com.example.models.UserDto
-import com.example.util.toClass
-import com.example.util.toDutyDto
-import com.example.util.toStudent
-import com.example.util.toUserDto
+import com.example.util.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
+import java.util.*
 
 class StudentDao(
     private val teacherDao: TeacherDao,
@@ -99,4 +97,20 @@ class StudentDao(
                     it.toDutyDto(userDao.findUserById(it[Posts.authorId])?.name ?: "")
                 }
         }
-    }
+
+    fun getDutiesStatistic(studentId: String) =
+        transaction {
+            "${getNumberOfDutyIsDoneThisWeak(studentId)} / ${getNumberOfDutyInThisWeak(studentId)}"
+        }
+
+    private fun getNumberOfDutyInThisWeak(studentId: String): Int =
+        (Duties innerJoin Posts)
+            .select(Posts.classId.inList(getListOfClasses(studentId)) and Posts.type.eq(PostType.DUTY.name) and Posts.datePosted.inList((Date().getRangeOfLastWeak()).toList())).count()
+
+    private fun getNumberOfDutyIsDoneThisWeak(studentId: String) =
+        (Duties innerJoin Posts innerJoin DutyStudent)
+            .select(DutyStudent.dutyId.eq(Duties.id) and DutyStudent.studentId.eq(studentId) and  Posts.datePosted.inList((Date().getRangeOfLastWeak()).toList()))
+
+
+}
+

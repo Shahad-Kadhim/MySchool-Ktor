@@ -88,3 +88,18 @@ fun Route.getStudentAssignments(){
         }
     }
 }
+
+fun Route.getDutiesStatistic(){
+    get("/student/dutiesStatistic"){
+        call.principal<JWTPrincipal>()?.let {
+            call.respond(
+                BaseResponse(
+                    HttpStatusCode.OK.value,
+                    studentRepository.getDutiesStatistic(
+                        it.payload.getClaim(JwtConfig.CLAIM_ID).asString(),
+                    )
+                )
+            )
+        }
+    }
+}

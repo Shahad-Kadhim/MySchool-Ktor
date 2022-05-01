@@ -24,4 +24,6 @@ class StudentRepository(
     fun getStudentAssignments(studentId: String) =
         studentDao.getAssignmentForStudent(studentId)
 
+    fun getDutiesStatistic(studentId: String) =
+        studentDao.getDutiesStatistic(studentId)
 }

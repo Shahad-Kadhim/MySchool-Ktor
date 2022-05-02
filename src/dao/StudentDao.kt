@@ -9,7 +9,9 @@ import com.example.models.StudentDto
 import com.example.models.UserDto
 import com.example.util.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.greater
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.less
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
@@ -105,11 +107,17 @@ class StudentDao(
 
     private fun getNumberOfDutyInThisWeak(studentId: String): Int =
         (Duties innerJoin Posts)
-            .select(Posts.classId.inList(getListOfClasses(studentId)) and Posts.type.eq(PostType.DUTY.name) and Posts.datePosted.inList((Date().getRangeOfLastWeak()).toList())).count()
+            .select(Posts.classId.inList(getListOfClasses(studentId)) and Posts.type.eq(PostType.DUTY.name) and  Posts.datePosted.less(Date().time) and  Posts.datePosted.greater(Date().getDateOfLastWeak()) ).count()
 
     private fun getNumberOfDutyIsDoneThisWeak(studentId: String) =
-        (Duties innerJoin Posts innerJoin DutyStudent)
-            .select(DutyStudent.dutyId.eq(Duties.id) and DutyStudent.studentId.eq(studentId) and  Posts.datePosted.inList((Date().getRangeOfLastWeak()).toList()))
+        DutyStudent
+            .select(
+                DutyStudent.studentId.eq(studentId) and
+                        DutyStudent.dutyId.inList(
+                            (Duties innerJoin Posts )
+                                .select(  Posts.datePosted.less(Date().time) and  Posts.datePosted.greater(Date().getDateOfLastWeak()) ).map{ it[Posts.id]}
+                        )
+            ).count()
 
 
 }

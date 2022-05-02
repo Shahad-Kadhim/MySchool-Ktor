@@ -312,10 +312,10 @@ fun Comments.insertComment(comment: Comment){
 fun IntRange.toLongList() =
     this.toList().map { it.toLong() }
 
-fun Date.getRangeOfLastWeak(): LongRange =
+fun Date.getDateOfLastWeak(): Long =
     Calendar.getInstance().apply {
-        time = this@getRangeOfLastWeak
+        time = this@getDateOfLastWeak
         add(Calendar.DAY_OF_WEEK,-7)
-    }.time.time..this@getRangeOfLastWeak.time
+    }.time.time
 
 

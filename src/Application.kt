@@ -143,7 +143,7 @@ fun Routing.student() {
         getStudentSchool()
         addSolution()
         getStudentAssignments()
-//        getDutiesStatistic()
+        getDutiesStatistic()
     }
 }
 

@@ -25,4 +25,7 @@ class UserRepository(
 
     fun getRoles() =
         userDao.getRoles()
+
+    fun getUserInfo(id: String) =
+        userDao.getUserInfoById(id)
 }

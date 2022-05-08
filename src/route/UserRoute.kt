@@ -12,6 +12,8 @@ import com.example.requestBody.MangerRegisterBody
 import com.example.requestBody.StudentRegisterBody
 import com.example.requestBody.TeacherRegisterBody
 import io.ktor.application.*
+import io.ktor.auth.*
+import io.ktor.auth.jwt.*
 import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
@@ -125,6 +127,21 @@ fun Route.loginUser(){
             }
         }catch (e: Exception){
             call.respond(HttpStatusCode.BadRequest)
+        }
+    }
+}
+
+fun Route.getInfo(){
+    get("/getInfo"){
+        call.principal<JWTPrincipal>()?.let {
+            call.respond(
+                BaseResponse(
+                    HttpStatusCode.OK.value,
+                    userRepository.getUserInfo(
+                        it.payload.getClaim(JwtConfig.CLAIM_ID).asString()
+                    )
+                )
+            )
         }
     }
 }

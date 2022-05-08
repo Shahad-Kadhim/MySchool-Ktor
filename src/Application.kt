@@ -116,6 +116,7 @@ fun Application.module(testing: Boolean = false) {
             getStudentInfo()
             getMangerInfo()
             getNotification()
+            getInfo()
         }
         authenticate("auth-student","auth-manger") {
             getStudentClasses()

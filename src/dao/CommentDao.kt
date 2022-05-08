@@ -23,13 +23,17 @@ class CommentDao(
             Posts.select(Posts.id.eq(comment.postId)).map {
                 userDao.findUserById(it[Posts.authorId])
             }.firstOrNull()?.let {
-                createNotificationToCommentInPost(comment)
+                getPostAuthor(comment.postId)?.takeIf {
+                    it != comment.authorId
+                }?.let { postAuthorId ->
+                    createNotificationToCommentInPost(postAuthorId,comment)
+                }
             }
         }
     }
 
 
-    private fun createNotificationToCommentInPost(comment: Comment){
+    private fun createNotificationToCommentInPost(postAuthorId: String,comment: Comment){
         notificationDao.createNotification(
             Notification(
                 id = UUID.randomUUID().toString(),
@@ -37,14 +41,14 @@ class CommentDao(
                 content = comment.content,
                 date = Date().time
             ),
-            listOf(getPostAuthor(comment.postId))
+            listOf(postAuthorId)
         )
     }
 
 
     private fun  getPostAuthor(postId: String) =
         transaction {
-            Posts.select(Posts.id.eq(postId)).map { it[Posts.authorId] }.firstOrNull() ?: ""
+            Posts.select(Posts.id.eq(postId)).map { it[Posts.authorId] }.firstOrNull()
         }
 
     fun getCommentsInPost(postId: String): List<CommentDto> =

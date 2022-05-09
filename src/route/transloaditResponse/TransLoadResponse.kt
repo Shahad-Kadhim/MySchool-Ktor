@@ -56,7 +56,7 @@ data class TransLoadResponse(
     @SerializedName("is_infinite")
     val isInfinite: Boolean? = null,
     @SerializedName("jobs_queue_duration")
-    val jobsQueueDuration: Int? = null,
+    val jobsQueueDuration: Double? = null,
     @SerializedName("last_job_completed")
     val lastJobCompleted: String? = null,
     @SerializedName("merged_params")

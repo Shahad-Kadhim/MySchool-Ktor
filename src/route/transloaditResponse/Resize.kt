@@ -42,7 +42,7 @@ data class Resize(
     @SerializedName("queue")
     val queue: String? = null,
     @SerializedName("queueTime")
-    val queueTime: Int? = null,
+    val queueTime: Double? = null,
     @SerializedName("size")
     val size: Int? = null,
     @SerializedName("ssl_url")

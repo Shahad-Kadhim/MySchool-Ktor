@@ -58,9 +58,9 @@ fun Route.getSolutionsForDuty(){
                 call.request.queryParameters["dutyId"]?.let { dutyId ->
                     dutyRepository.getSolutionsForDuty(dutyId)
                         .apply {
-//                            forEach {
-//                                it.solutionLink = loadImage.getImageUrl(it.solutionLink)
-//                            }
+                            forEach {
+                                it.solutionLink = loadImage.getImageUrl(it.solutionLink)
+                            }
                             call.respond(
                                 BaseResponse(
                                     HttpStatusCode.OK.value,

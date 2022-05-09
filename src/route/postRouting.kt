@@ -23,6 +23,7 @@ private val postRepository: PostRepository by KoinJavaComponent.inject(PostRepos
 
 private  val gson: Gson by KoinJavaComponent.inject(Gson::class.java)
 private val imageUpload: ImageUpload by KoinJavaComponent.inject(ImageUpload::class.java)
+private val loadImage: LoadImage by KoinJavaComponent.inject(LoadImage::class.java)
 
 fun Route.createPost(){
     post("post/create"){
@@ -118,6 +119,9 @@ fun Route.getPostById(){
     get("post/{postId}"){
         call.parameters["postId"]?.let{ postId ->
             postRepository.getPostDetails(postId)?.let { postDetails ->
+                postDetails.payload?.let {payload ->
+                    postDetails.payload = loadImage.getImageUrl(payload)
+                }
                 call.respond(
                     BaseResponse(
                         HttpStatusCode.OK.value,

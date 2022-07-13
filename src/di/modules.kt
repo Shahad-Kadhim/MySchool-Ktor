@@ -46,9 +46,15 @@ val appModule = module(createdAtStart = true) {
     single {  HttpLoggingInterceptor().apply{
         level = HttpLoggingInterceptor.Level.BODY
     } }
-    factory { Retrofit.Builder()
+    factory {
+        Retrofit.Builder()
         .baseUrl("https://fcm.googleapis.com/")
-        .client(OkHttpClient.Builder().addInterceptor(get<FirebaseInterceptor>()).addInterceptor(get<HttpLoggingInterceptor>()).build())
+        .client(
+            OkHttpClient.Builder()
+                .addInterceptor(get<FirebaseInterceptor>())
+                .addInterceptor(get<HttpLoggingInterceptor>())
+                .build()
+        )
         .addConverterFactory(GsonConverterFactory.create())
         .build()
     }

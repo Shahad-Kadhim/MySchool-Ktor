@@ -35,7 +35,7 @@ class JwtConfig(jwtSecret: String) {
             .withIssuer(jwtIssuer)
             .withClaim(CLAIM_ID, user.id)
             .withClaim(CLAIM_ROLE, user.role.toString())
-            .withExpiresAt(Date(System.currentTimeMillis()+64000000))
+            .withExpiresAt(Date(System.currentTimeMillis()+2592000000))
             .sign(jwtAlgorithm)
 
     fun teacherAuth(auth:Authentication.Configuration){
